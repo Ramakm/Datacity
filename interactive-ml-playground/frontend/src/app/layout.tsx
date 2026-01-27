@@ -125,12 +125,10 @@ export default function RootLayout({
                 </div>
 
                 <div>
-                  <h4 className="font-mono font-bold text-xs uppercase tracking-terminal mb-4 text-terminal-mint">SYSTEM STACK</h4>
+                  <h4 className="font-mono font-bold text-xs uppercase tracking-terminal mb-4 text-terminal-mint">Paper & Coding</h4>
                   <ul className="space-y-2 text-xs font-mono text-terminal-grid">
-                    <li>NEXT.JS // REACT</li>
-                    <li>FASTAPI // PYTHON</li>
-                    <li>SCIKIT-LEARN</li>
-                    <li>RECHARTS</li>
+                    <li>Reasearch Paper</li>
+                    <li>Questions Practice</li>
                   </ul>
                 </div>
               </div>
