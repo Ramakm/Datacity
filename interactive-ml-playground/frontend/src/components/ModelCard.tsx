@@ -29,17 +29,8 @@ export default function ModelCard({
   tags,
   comingSoon = false,
 }: ModelCardProps) {
-  const CardWrapper = comingSoon ? "div" : Link;
-  const cardProps = comingSoon ? {} : { href: `/models/${id}` };
-
-  return (
-    <CardWrapper
-      {...cardProps}
-      className={clsx(
-        "model-card block bg-white rounded-xl border border-slate-200 p-6",
-        comingSoon ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
-      )}
-    >
+  const cardContent = (
+    <>
       <div className="flex items-start justify-between mb-3">
         <div>
           <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
@@ -83,6 +74,21 @@ export default function ModelCard({
           </>
         )}
       </div>
-    </CardWrapper>
+    </>
+  );
+
+  const cardClassName = clsx(
+    "model-card block bg-white rounded-xl border border-slate-200 p-6",
+    comingSoon ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+  );
+
+  if (comingSoon) {
+    return <div className={cardClassName}>{cardContent}</div>;
+  }
+
+  return (
+    <Link href={`/models/${id}`} className={cardClassName}>
+      {cardContent}
+    </Link>
   );
 }

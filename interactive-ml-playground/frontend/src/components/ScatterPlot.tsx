@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  ReferenceLine,
   Legend,
 } from "recharts";
 
@@ -110,7 +109,7 @@ export default function ScatterPlot({
               name="Perfect Prediction"
               data={perfectLine}
               line={{ stroke: "#22c55e", strokeWidth: 2, strokeDasharray: "5 5" }}
-              shape={() => null}
+              shape={() => <></>}
               legendType="line"
             />
             {/* Actual predictions */}

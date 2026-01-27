@@ -1,3 +1,6 @@
 {
-  "/page": "app/page.js"
+  "/not-found": "app/not-found.js",
+  "/page": "app/page.js",
+  "/models/linear-regression/page": "app/models/linear-regression/page.js",
+  "/models/logistic-regression/page": "app/models/logistic-regression/page.js"
 }
