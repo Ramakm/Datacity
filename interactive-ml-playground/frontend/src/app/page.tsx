@@ -1,269 +1,170 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { Play, ChevronDown, Sparkles, Database, Brain, MousePointer, Zap } from "lucide-react";
-import AnimatedBackground from "@/components/AnimatedBackground";
-import { FloatingSymbols, FloatingDataPoints, GlowOrbs } from "@/components/FloatingElements";
-import ModelCardPremium from "@/components/ModelCardPremium";
+import { Terminal, Database, Cpu, ArrowRight, AlertTriangle } from "lucide-react";
+import ModelCard from "@/components/ModelCard";
 
 const models = [
   {
     id: "linear-regression",
     name: "Linear Regression",
-    description: "Find the best-fit line through your data. The foundation of predictive modeling.",
-    category: "Regression",
+    description: "Predictive modeling through best-fit line analysis. Foundation of regression algorithms.",
+    category: "REGRESSION",
     difficulty: "Beginner",
     tags: ["supervised", "regression", "interpretable"],
-    icon: "linear" as const,
-    color: "#00f2fe",
   },
   {
     id: "logistic-regression",
     name: "Logistic Regression",
-    description: "Classify data into categories. The gateway to classification algorithms.",
-    category: "Classification",
+    description: "Binary classification using sigmoid probability function. Gateway to classification systems.",
+    category: "CLASSIFICATION",
     difficulty: "Beginner",
     tags: ["supervised", "classification", "probabilities"],
-    icon: "logistic" as const,
-    color: "#a855f7",
   },
   {
     id: "knn",
     name: "K-Nearest Neighbors",
-    description: "Predict based on similarity. Let your data vote on the outcome.",
-    category: "Classification",
+    description: "Instance-based learning through proximity analysis. Lazy evaluation methodology.",
+    category: "CLASSIFICATION",
     difficulty: "Beginner",
     tags: ["supervised", "instance-based", "lazy-learning"],
-    icon: "knn" as const,
-    color: "#22c55e",
+    comingSoon: true,
   },
   {
     id: "kmeans",
     name: "K-Means Clustering",
-    description: "Discover hidden patterns. Group similar data points automatically.",
-    category: "Clustering",
+    description: "Unsupervised pattern discovery through centroid-based partitioning.",
+    category: "CLUSTERING",
     difficulty: "Intermediate",
     tags: ["unsupervised", "clustering", "partitioning"],
-    icon: "kmeans" as const,
-    color: "#f59e0b",
+    comingSoon: true,
   },
 ];
 
-const steps = [
+const procedures = [
   {
-    number: "01",
-    title: "Pick a Model",
-    description: "Choose from our collection of ML algorithms. Each one tells a different story.",
-    icon: MousePointer,
-    color: "#00f2fe",
+    code: "01",
+    label: "SELECT MODEL",
+    description: "Choose algorithm from available modules. Each serves distinct analytical purpose.",
+    icon: Terminal,
   },
   {
-    number: "02",
-    title: "Play with Data",
-    description: "Upload your own CSV or use sample data. Watch the algorithm learn in real-time.",
+    code: "02",
+    label: "INPUT DATA",
+    description: "Upload CSV dataset or utilize provided sample data for analysis.",
     icon: Database,
-    color: "#a855f7",
   },
   {
-    number: "03",
-    title: "See Intelligence Emerge",
-    description: "Visualize predictions, understand coefficients, and export working Python code.",
-    icon: Brain,
-    color: "#22c55e",
+    code: "03",
+    label: "EXECUTE",
+    description: "Train model, analyze metrics, export reproducible Python implementation.",
+    icon: Cpu,
   },
 ];
 
 function HeroSection() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
-
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <FloatingSymbols />
-      <FloatingDataPoints />
-      <GlowOrbs />
-
-      <motion.div
-        style={{ opacity, scale, y }}
-        className="relative z-10 text-center px-4 max-w-5xl mx-auto"
-      >
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8"
-        >
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          <span className="text-sm text-slate-300">The future of ML education</span>
-        </motion.div>
-
-        {/* Main Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
-        >
-          <span className="text-white">Train AI.</span>
-          <br />
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
-            Break it.
+    <section className="relative py-20 px-4">
+      <div className="max-w-5xl mx-auto">
+        {/* System Status */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-3 h-3 bg-terminal-accent animate-pulse" />
+          <span className="font-mono text-xs uppercase tracking-terminal text-terminal-black">
+            SYSTEM ONLINE // ALL MODULES OPERATIONAL
           </span>
+        </div>
+
+        {/* Main Title */}
+        <h1 className="heading-terminal text-5xl md:text-7xl lg:text-8xl text-terminal-black mb-6 leading-tight">
+          MACHINE
           <br />
-          <span className="text-white">Understand it.</span>
-        </motion.h1>
+          LEARNING
+          <br />
+          <span className="text-terminal-accent">TERMINAL</span>
+        </h1>
 
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto mb-12"
-        >
-          The world&apos;s first interactive Machine Learning playground.
-          <br className="hidden sm:block" />
-          <span className="text-slate-300">No lectures. Just real models you can touch.</span>
-        </motion.p>
+        {/* Subtitle */}
+        <p className="font-mono text-sm md:text-base text-terminal-black/70 max-w-2xl mb-10 leading-relaxed">
+          INTERACTIVE RESEARCH INTERFACE FOR ALGORITHMIC ANALYSIS.
+          <br />
+          TRAIN MODELS. ANALYZE DATA. GENERATE CODE.
+          <br />
+          NO ACCOUNTS REQUIRED. NO DATA RETENTION.
+        </p>
 
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <motion.a
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <a
             href="#models"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group relative px-8 py-4 rounded-xl font-semibold text-lg overflow-hidden"
+            className="btn-terminal text-base px-6 py-3"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600" />
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute inset-[1px] bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[10px] group-hover:bg-transparent transition-colors" />
-            <span className="relative flex items-center gap-2 text-white">
-              <Zap className="w-5 h-5" />
-              Start Playing
-            </span>
-          </motion.a>
+            ACCESS MODELS
+            <ArrowRight className="w-4 h-4" />
+          </a>
+          <a
+            href="#procedures"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 font-mono font-bold text-xs uppercase tracking-terminal text-terminal-black border-2 border-terminal-black hover:bg-terminal-black hover:text-terminal-mint transition-all"
+          >
+            VIEW PROCEDURES
+          </a>
+        </div>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg border border-white/20 text-white hover:bg-white/5 transition-colors"
-          >
-            <Play className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
-            Watch 30-second Demo
-          </motion.button>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="flex flex-col items-center gap-2 text-slate-500"
-          >
-            <span className="text-sm">Scroll to explore</span>
-            <ChevronDown className="w-5 h-5" />
-          </motion.div>
-        </motion.div>
-      </motion.div>
+        {/* Warning Notice */}
+        <div className="mt-12 p-4 border-2 border-terminal-warning bg-terminal-warning/10 flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-terminal-warning flex-shrink-0 mt-0.5" />
+          <p className="font-mono text-xs text-terminal-black leading-relaxed">
+            <span className="font-bold">NOTICE:</span> THIS IS AN EDUCATIONAL RESEARCH TOOL.
+            ALL COMPUTATIONS ARE PERFORMED LOCALLY. NO USER DATA IS TRANSMITTED OR STORED.
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
 
-function HowItWorksSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
+function ProceduresSection() {
   return (
-    <section ref={ref} className="relative py-32 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section id="procedures" className="py-20 px-4">
+      <div className="max-w-5xl mx-auto">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <span className="text-cyan-400 font-medium text-sm tracking-wider uppercase mb-4 block">
-            How It Works
+        <div className="mb-12">
+          <span className="font-mono text-xs uppercase tracking-terminal text-terminal-accent mb-2 block">
+            {"//"} OPERATIONAL PROCEDURES
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Three steps to{" "}
-            <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              understanding
-            </span>
+          <h2 className="heading-terminal text-3xl md:text-4xl text-terminal-black">
+            SYSTEM WORKFLOW
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            We believe the best way to learn ML is to experience it. No theory overload, just hands-on discovery.
-          </p>
-        </motion.div>
+        </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.number}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="relative group"
+        {/* Procedure Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {procedures.map((proc, index) => (
+            <div
+              key={proc.code}
+              className="bg-terminal-panel border-2 border-terminal-black p-6 relative"
             >
-              {/* Connector line */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-16 left-[60%] w-[80%] h-px bg-gradient-to-r from-slate-700 to-transparent" />
-              )}
-
-              <div className="relative">
-                {/* Glow */}
-                <div
-                  className="absolute -inset-4 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
-                  style={{ background: `${step.color}20` }}
-                />
-
-                {/* Card */}
-                <div className="relative bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 hover:border-slate-600/50 transition-colors">
-                  {/* Number */}
-                  <div
-                    className="text-6xl font-bold mb-6 opacity-20"
-                    style={{ color: step.color }}
-                  >
-                    {step.number}
-                  </div>
-
-                  {/* Icon */}
-                  <div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-6"
-                    style={{
-                      background: `linear-gradient(135deg, ${step.color}30, ${step.color}10)`,
-                      border: `1px solid ${step.color}40`,
-                    }}
-                  >
-                    <step.icon className="w-7 h-7" style={{ color: step.color }} />
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="text-2xl font-bold text-white mb-3">{step.title}</h3>
-                  <p className="text-slate-400 leading-relaxed">{step.description}</p>
-                </div>
+              {/* Procedure Number */}
+              <div className="text-6xl font-mono font-bold text-terminal-black/10 absolute top-4 right-4">
+                {proc.code}
               </div>
-            </motion.div>
+
+              {/* Icon */}
+              <div className="w-12 h-12 bg-terminal-black flex items-center justify-center mb-4">
+                <proc.icon className="w-6 h-6 text-terminal-mint" />
+              </div>
+
+              {/* Content */}
+              <h3 className="font-mono font-bold text-sm uppercase tracking-terminal text-terminal-black mb-2">
+                {proc.label}
+              </h3>
+              <p className="font-mono text-xs text-terminal-black/70 leading-relaxed">
+                {proc.description}
+              </p>
+
+              {/* Connector */}
+              {index < procedures.length - 1 && (
+                <div className="hidden md:block absolute top-1/2 -right-6 w-6 border-t-2 border-dashed border-terminal-black/30" />
+              )}
+            </div>
           ))}
         </div>
       </div>
@@ -271,42 +172,30 @@ function HowItWorksSection() {
   );
 }
 
-function ModelGallerySection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
+function ModelsSection() {
   return (
-    <section id="models" ref={ref} className="relative py-32 px-4">
-      <div className="max-w-7xl mx-auto">
+    <section id="models" className="py-20 px-4 bg-terminal-panel/50">
+      <div className="max-w-6xl mx-auto">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <span className="text-purple-400 font-medium text-sm tracking-wider uppercase mb-4 block">
-            Model Gallery
+        <div className="mb-12">
+          <span className="font-mono text-xs uppercase tracking-terminal text-terminal-accent mb-2 block">
+            {"//"} AVAILABLE MODULES
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Choose your{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-              adventure
-            </span>
+          <h2 className="heading-terminal text-3xl md:text-4xl text-terminal-black mb-4">
+            MODEL REGISTRY
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            Each model is a journey. Start with the basics or dive into clustering.
-            We&apos;ll make it make sense.
+          <p className="font-mono text-xs text-terminal-black/70 max-w-2xl">
+            SELECT A MODULE TO BEGIN ANALYSIS. EACH MODEL INCLUDES INTERACTIVE TRAINING,
+            VISUALIZATION, AND CODE GENERATION CAPABILITIES.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Model Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {models.map((model, index) => (
-            <ModelCardPremium
+        {/* Model Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {models.map((model) => (
+            <ModelCard
               key={model.id}
               {...model}
-              index={index}
             />
           ))}
         </div>
@@ -315,52 +204,44 @@ function ModelGallerySection() {
   );
 }
 
-function CTASection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
+function SystemInfoSection() {
   return (
-    <section ref={ref} className="relative py-32 px-4">
+    <section className="py-20 px-4">
       <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.6 }}
-          className="relative"
-        >
-          {/* Glow background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 blur-3xl" />
-
-          {/* Card */}
-          <div className="relative bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-12 md:p-16 text-center overflow-hidden">
-            {/* Top border gradient */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-              Ready to demystify{" "}
-              <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                machine learning
-              </span>
-              ?
-            </h2>
-
-            <p className="text-slate-400 text-lg mb-10 max-w-xl mx-auto">
-              No accounts. No credit cards. No data saved.
-              <br />
-              Just you, the algorithms, and understanding.
-            </p>
-
-            <motion.a
-              href="#models"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-10 py-5 rounded-xl font-semibold text-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-lg hover:shadow-cyan-500/25 transition-shadow"
-            >
-              <Zap className="w-5 h-5" />
-              Start Your First Model
-            </motion.a>
+        <div className="bg-terminal-black text-terminal-mint p-8 md:p-12 border-2 border-terminal-black">
+          {/* Terminal Header */}
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-terminal-mint/30">
+            <div className="w-3 h-3 bg-red-500" />
+            <div className="w-3 h-3 bg-terminal-warning" />
+            <div className="w-3 h-3 bg-terminal-accent" />
+            <span className="ml-4 font-mono text-xs opacity-60">SYSTEM_INFO.sh</span>
           </div>
-        </motion.div>
+
+          {/* Terminal Content */}
+          <div className="font-mono text-sm space-y-2">
+            <p><span className="text-terminal-accent">$</span> cat /etc/ml-terminal/info</p>
+            <p className="opacity-70">---</p>
+            <p className="opacity-70">VERSION: 1.0.0</p>
+            <p className="opacity-70">STATUS: OPERATIONAL</p>
+            <p className="opacity-70">MODELS_AVAILABLE: 4</p>
+            <p className="opacity-70">MODELS_ACTIVE: 2</p>
+            <p className="opacity-70">---</p>
+            <p className="mt-4"><span className="text-terminal-accent">$</span> echo $PRIVACY_POLICY</p>
+            <p className="opacity-70">NO_TRACKING // NO_COOKIES // NO_DATA_RETENTION</p>
+            <p className="mt-4"><span className="text-terminal-accent">$</span> _<span className="animate-pulse">|</span></p>
+          </div>
+
+          {/* CTA */}
+          <div className="mt-8 pt-6 border-t border-terminal-mint/30">
+            <a
+              href="#models"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-terminal-mint text-terminal-black font-mono font-bold text-xs uppercase tracking-terminal border-2 border-terminal-mint hover:bg-transparent hover:text-terminal-mint transition-all"
+            >
+              INITIALIZE SESSION
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -369,14 +250,10 @@ function CTASection() {
 export default function Home() {
   return (
     <main className="relative">
-      <AnimatedBackground />
-
-      <div className="relative z-10">
-        <HeroSection />
-        <HowItWorksSection />
-        <ModelGallerySection />
-        <CTASection />
-      </div>
+      <HeroSection />
+      <ProceduresSection />
+      <ModelsSection />
+      <SystemInfoSection />
     </main>
   );
 }

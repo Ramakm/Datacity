@@ -13,80 +13,75 @@ export default function LinearRegressionPage() {
   const [activeTab, setActiveTab] = useState<Tab>("explainer");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950">
-      {/* Background effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-terminal-bg">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6"
+            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-terminal text-terminal-black hover:text-terminal-accent transition-colors mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Models
+            RETURN TO REGISTRY
           </Link>
 
-          <div className="flex items-start justify-between">
-            <div className="flex items-start gap-4">
-              {/* Icon */}
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30 flex items-center justify-center">
-                <TrendingUp className="w-7 h-7 text-cyan-400" />
+          <div className="bg-terminal-panel border-2 border-terminal-black p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4">
+                {/* Icon */}
+                <div className="w-12 h-12 bg-terminal-black flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-terminal-mint" />
+                </div>
+
+                <div>
+                  <h1 className="heading-terminal text-2xl md:text-3xl text-terminal-black mb-2">
+                    LINEAR_REGRESSION
+                  </h1>
+                  <p className="font-mono text-xs text-terminal-black/70 max-w-2xl leading-relaxed">
+                    REGRESSION ALGORITHM // CONTINUOUS VALUE PREDICTION //
+                    BEST-FIT LINE ANALYSIS THROUGH ORDINARY LEAST SQUARES METHOD
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2">
-                  Linear Regression
-                </h1>
-                <p className="text-slate-400 max-w-2xl">
-                  A fundamental algorithm that models the relationship between
-                  variables using a linear equation. Perfect for predicting
-                  continuous values.
-                </p>
+              <div className="hidden sm:flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2 py-1 border-2 border-terminal-accent text-terminal-accent uppercase tracking-terminal">
+                  LVL-1
+                </span>
+                <span className="text-xs font-mono font-bold px-2 py-1 border-2 border-terminal-black text-terminal-black uppercase tracking-terminal">
+                  REGRESSION
+                </span>
               </div>
-            </div>
-
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="text-xs font-medium px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                Beginner
-              </span>
-              <span className="text-xs font-medium px-3 py-1.5 rounded-full bg-slate-700/50 text-slate-300 border border-slate-600/50">
-                Regression
-              </span>
             </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="border-b border-slate-700/50 mb-8">
-          <nav className="flex gap-8">
+        <div className="border-b-2 border-terminal-black mb-8">
+          <nav className="flex">
             <button
               onClick={() => setActiveTab("explainer")}
               className={clsx(
-                "flex items-center gap-2 py-4 border-b-2 font-medium transition-colors",
+                "flex items-center gap-2 px-6 py-4 font-mono font-bold text-xs uppercase tracking-terminal border-b-3 transition-colors",
                 activeTab === "explainer"
-                  ? "border-cyan-500 text-cyan-400"
-                  : "border-transparent text-slate-400 hover:text-white hover:border-slate-600"
+                  ? "border-terminal-black text-terminal-black bg-terminal-panel"
+                  : "border-transparent text-terminal-black/50 hover:text-terminal-black hover:bg-terminal-panel/50"
               )}
             >
-              <BookOpen className="w-5 h-5" />
-              Explainer
+              <BookOpen className="w-4 h-4" />
+              THEORY
             </button>
             <button
               onClick={() => setActiveTab("tryit")}
               className={clsx(
-                "flex items-center gap-2 py-4 border-b-2 font-medium transition-colors",
+                "flex items-center gap-2 px-6 py-4 font-mono font-bold text-xs uppercase tracking-terminal border-b-3 transition-colors",
                 activeTab === "tryit"
-                  ? "border-cyan-500 text-cyan-400"
-                  : "border-transparent text-slate-400 hover:text-white hover:border-slate-600"
+                  ? "border-terminal-black text-terminal-black bg-terminal-panel"
+                  : "border-transparent text-terminal-black/50 hover:text-terminal-black hover:bg-terminal-panel/50"
               )}
             >
-              <FlaskConical className="w-5 h-5" />
-              Try It With Data
+              <FlaskConical className="w-4 h-4" />
+              EXECUTE MODEL
             </button>
           </nav>
         </div>

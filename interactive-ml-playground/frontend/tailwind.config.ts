@@ -9,18 +9,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: "#f0f9ff",
-          100: "#e0f2fe",
-          200: "#bae6fd",
-          300: "#7dd3fc",
-          400: "#38bdf8",
-          500: "#0ea5e9",
-          600: "#0284c7",
-          700: "#0369a1",
-          800: "#075985",
-          900: "#0c4a6e",
+        terminal: {
+          bg: "#cfeee3",
+          panel: "#f5f5f0",
+          black: "#0a0a0a",
+          grid: "#d4d4c8",
+          accent: "#1a5c3a",
+          warning: "#c4a000",
+          mint: "#cfeee3",
         },
+      },
+      fontFamily: {
+        mono: ['"JetBrains Mono"', '"IBM Plex Mono"', '"Space Mono"', 'monospace'],
+        condensed: ['"Oswald"', '"Barlow Condensed"', 'sans-serif'],
+      },
+      borderRadius: {
+        terminal: '2px',
+      },
+      letterSpacing: {
+        terminal: '0.12em',
       },
     },
   },

@@ -22,46 +22,41 @@ interface StoryStep {
 const storySteps: StoryStep[] = [
   {
     id: 1,
-    title: "The Problem",
-    icon: <Target className="w-5 h-5" />,
+    title: "PROBLEM DEFINITION",
+    icon: <Target className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          Imagine you&apos;re a real estate agent. Every day, clients ask:{" "}
-          <span className="font-semibold text-cyan-400">
-            &quot;How much is this house worth?&quot;
-          </span>
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          SCENARIO: Real estate price prediction. Input: property features. Output: continuous value (price).
         </p>
-        <p className="text-slate-400">
-          You notice a pattern: bigger houses tend to cost more. But how can you
-          turn this intuition into a precise prediction?
+        <p className="font-mono text-xs text-terminal-black/70">
+          Observation: Larger properties correlate with higher prices. Objective: Transform this pattern into precise predictions.
         </p>
-        <div className="bg-cyan-500/10 rounded-lg p-4 border border-cyan-500/20">
-          <p className="text-cyan-300 font-medium">
-            This is a regression problem: predicting a continuous number (price)
-            from input features (size, bedrooms, etc.)
+        <div className="bg-terminal-accent/10 border-2 border-terminal-accent p-4">
+          <p className="font-mono text-xs text-terminal-accent font-bold">
+            CLASSIFICATION: REGRESSION PROBLEM // CONTINUOUS OUTPUT // SUPERVISED LEARNING
           </p>
         </div>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full flex items-center justify-center">
-        <div className="space-y-3 w-full max-w-xs">
-          <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600/50">
-            <span className="text-slate-400">1,000 sqft</span>
-            <span className="font-semibold text-white">$150,000</span>
+      <div className="bg-terminal-black p-6 h-full flex items-center justify-center">
+        <div className="space-y-2 w-full max-w-xs font-mono text-xs">
+          <div className="flex items-center justify-between p-2 border border-terminal-grid text-terminal-mint">
+            <span>1,000 SQFT</span>
+            <span className="font-bold">$150,000</span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600/50">
-            <span className="text-slate-400">1,500 sqft</span>
-            <span className="font-semibold text-white">$225,000</span>
+          <div className="flex items-center justify-between p-2 border border-terminal-grid text-terminal-mint">
+            <span>1,500 SQFT</span>
+            <span className="font-bold">$225,000</span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600/50">
-            <span className="text-slate-400">2,000 sqft</span>
-            <span className="font-semibold text-white">$300,000</span>
+          <div className="flex items-center justify-between p-2 border border-terminal-grid text-terminal-mint">
+            <span>2,000 SQFT</span>
+            <span className="font-bold">$300,000</span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-cyan-500/10 rounded-lg border-2 border-cyan-500/30 border-dashed">
-            <span className="text-cyan-400">1,750 sqft</span>
-            <span className="font-semibold text-cyan-400">???</span>
+          <div className="flex items-center justify-between p-2 border-2 border-dashed border-terminal-warning text-terminal-warning">
+            <span>1,750 SQFT</span>
+            <span className="font-bold">???</span>
           </div>
         </div>
       </div>
@@ -69,219 +64,132 @@ const storySteps: StoryStep[] = [
   },
   {
     id: 2,
-    title: "The Line of Best Fit",
-    icon: <TrendingUp className="w-5 h-5" />,
+    title: "LINE OF BEST FIT",
+    icon: <TrendingUp className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          Linear Regression finds the{" "}
-          <span className="font-semibold text-cyan-400">
-            best straight line
-          </span>{" "}
-          through your data points.
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Linear Regression computes the optimal straight line through data points.
         </p>
-        <p className="text-slate-400">
-          This line minimizes the total distance from all points to the line.
-          It&apos;s the line that &quot;best fits&quot; your data.
-        </p>
-        <div className="bg-slate-800/80 rounded-lg p-4 font-mono text-center text-lg border border-slate-700/50">
-          <span className="text-cyan-400 font-bold">y</span> ={" "}
-          <span className="text-green-400 font-bold">m</span>
-          <span className="text-white">x</span> +{" "}
-          <span className="text-amber-400 font-bold">b</span>
+        <div className="bg-terminal-black p-4 font-mono text-center text-base border-2 border-terminal-black">
+          <span className="text-terminal-accent font-bold">y</span>
+          <span className="text-terminal-mint"> = </span>
+          <span className="text-terminal-warning font-bold">m</span>
+          <span className="text-terminal-mint">x + </span>
+          <span className="text-red-400 font-bold">b</span>
         </div>
-        <ul className="space-y-2 text-slate-400">
-          <li className="flex items-start gap-2">
-            <span className="text-cyan-400 font-bold">y</span> = predicted
-            value (house price)
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-white font-bold">x</span> = input feature
-            (house size)
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-green-400 font-bold">m</span> = slope
-            (coefficient) - how much y changes for each unit of x
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-amber-400 font-bold">b</span> = intercept -
-            the starting point when x is 0
-          </li>
+        <ul className="space-y-2 font-mono text-xs text-terminal-black/80">
+          <li><span className="text-terminal-accent font-bold">y</span> = predicted output (price)</li>
+          <li><span className="text-terminal-black font-bold">x</span> = input feature (size)</li>
+          <li><span className="text-terminal-warning font-bold">m</span> = slope coefficient (rate of change)</li>
+          <li><span className="text-red-400 font-bold">b</span> = y-intercept (baseline value)</li>
         </ul>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full">
+      <div className="bg-terminal-black p-6 h-full">
         <svg viewBox="0 0 300 200" className="w-full h-full">
-          {/* Axes */}
-          <line x1="40" y1="160" x2="280" y2="160" stroke="#475569" strokeWidth="2" />
-          <line x1="40" y1="160" x2="40" y2="20" stroke="#475569" strokeWidth="2" />
-
-          {/* Axis labels */}
-          <text x="160" y="185" textAnchor="middle" className="fill-slate-500 text-xs">
-            House Size (sqft)
-          </text>
-          <text x="15" y="90" textAnchor="middle" transform="rotate(-90, 15, 90)" className="fill-slate-500 text-xs">
-            Price ($)
-          </text>
-
-          {/* Data points */}
-          <circle cx="60" cy="140" r="6" fill="#06b6d4" opacity="0.8" />
-          <circle cx="100" cy="120" r="6" fill="#06b6d4" opacity="0.8" />
-          <circle cx="120" cy="105" r="6" fill="#06b6d4" opacity="0.8" />
-          <circle cx="160" cy="85" r="6" fill="#06b6d4" opacity="0.8" />
-          <circle cx="200" cy="70" r="6" fill="#06b6d4" opacity="0.8" />
-          <circle cx="220" cy="55" r="6" fill="#06b6d4" opacity="0.8" />
-          <circle cx="260" cy="40" r="6" fill="#06b6d4" opacity="0.8" />
-
-          {/* Best fit line */}
-          <line x1="50" y1="145" x2="270" y2="35" stroke="#22c55e" strokeWidth="3" strokeDasharray="5,3" />
-
-          {/* Legend */}
-          <circle cx="200" cy="175" r="4" fill="#06b6d4" />
-          <text x="210" y="179" className="fill-slate-400 text-xs">Data</text>
-          <line x1="235" y1="175" x2="255" y2="175" stroke="#22c55e" strokeWidth="2" strokeDasharray="3,2" />
-          <text x="260" y="179" className="fill-slate-400 text-xs">Fit</text>
+          <line x1="40" y1="160" x2="280" y2="160" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="40" y1="160" x2="40" y2="20" stroke="#d4d4c8" strokeWidth="1" />
+          <text x="160" y="185" textAnchor="middle" fill="#d4d4c8" className="text-xs" style={{ fontFamily: 'monospace' }}>SIZE (SQFT)</text>
+          <text x="15" y="90" textAnchor="middle" transform="rotate(-90, 15, 90)" fill="#d4d4c8" className="text-xs" style={{ fontFamily: 'monospace' }}>PRICE ($)</text>
+          <circle cx="60" cy="140" r="4" fill="#cfeee3" />
+          <circle cx="100" cy="120" r="4" fill="#cfeee3" />
+          <circle cx="120" cy="105" r="4" fill="#cfeee3" />
+          <circle cx="160" cy="85" r="4" fill="#cfeee3" />
+          <circle cx="200" cy="70" r="4" fill="#cfeee3" />
+          <circle cx="220" cy="55" r="4" fill="#cfeee3" />
+          <circle cx="260" cy="40" r="4" fill="#cfeee3" />
+          <line x1="50" y1="145" x2="270" y2="35" stroke="#1a5c3a" strokeWidth="2" />
         </svg>
       </div>
     ),
   },
   {
     id: 3,
-    title: "How It Learns",
-    icon: <Calculator className="w-5 h-5" />,
+    title: "LEARNING ALGORITHM",
+    icon: <Calculator className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          The algorithm finds the best line by{" "}
-          <span className="font-semibold text-cyan-400">
-            minimizing errors
-          </span>
-          . It uses a method called &quot;Ordinary Least Squares&quot; (OLS).
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Optimization via Ordinary Least Squares (OLS). Objective: minimize total squared error.
         </p>
-        <div className="bg-slate-800/80 rounded-lg p-4 space-y-3 border border-slate-700/50">
-          <p className="font-medium text-white">The process:</p>
-          <ol className="space-y-2 text-slate-400 list-decimal list-inside">
-            <li>Start with a random line</li>
-            <li>Calculate the error for each point (predicted - actual)</li>
-            <li>Square each error (so negative errors count too)</li>
+        <div className="bg-terminal-panel border-2 border-terminal-black p-4 space-y-2">
+          <p className="font-mono text-xs font-bold text-terminal-black">PROCEDURE:</p>
+          <ol className="space-y-1 font-mono text-xs text-terminal-black/80 list-decimal list-inside">
+            <li>Initialize random line parameters</li>
+            <li>Compute error: predicted - actual</li>
+            <li>Square each error value</li>
             <li>Sum all squared errors</li>
-            <li>Adjust the line to minimize this sum</li>
+            <li>Optimize to minimize sum</li>
           </ol>
         </div>
-        <p className="text-slate-400">
-          The math finds the exact slope (m) and intercept (b) that make the
-          total squared error as small as possible.
-        </p>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full">
+      <div className="bg-terminal-black p-6 h-full">
         <svg viewBox="0 0 300 200" className="w-full h-full">
-          {/* Axes */}
-          <line x1="40" y1="160" x2="280" y2="160" stroke="#475569" strokeWidth="2" />
-          <line x1="40" y1="160" x2="40" y2="20" stroke="#475569" strokeWidth="2" />
-
-          {/* Best fit line */}
-          <line x1="50" y1="145" x2="270" y2="35" stroke="#22c55e" strokeWidth="2" />
-
-          {/* Data points with error lines */}
-          <circle cx="80" cy="125" r="5" fill="#06b6d4" />
-          <line x1="80" y1="125" x2="80" y2="135" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
-
-          <circle cx="120" cy="95" r="5" fill="#06b6d4" />
-          <line x1="120" y1="95" x2="120" y2="115" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
-
-          <circle cx="160" cy="100" r="5" fill="#06b6d4" />
-          <line x1="160" y1="100" x2="160" y2="90" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
-
-          <circle cx="200" cy="55" r="5" fill="#06b6d4" />
-          <line x1="200" y1="55" x2="200" y2="70" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
-
-          <circle cx="240" cy="50" r="5" fill="#06b6d4" />
-          <line x1="240" y1="50" x2="240" y2="48" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
-
-          {/* Error label */}
-          <text x="140" y="75" className="fill-red-400 text-xs font-medium">errors</text>
-
-          {/* Goal annotation */}
-          <text x="150" y="185" textAnchor="middle" className="fill-slate-500 text-xs">
-            Goal: minimize total squared error
-          </text>
+          <line x1="40" y1="160" x2="280" y2="160" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="40" y1="160" x2="40" y2="20" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="50" y1="145" x2="270" y2="35" stroke="#1a5c3a" strokeWidth="2" />
+          <circle cx="80" cy="125" r="4" fill="#cfeee3" />
+          <line x1="80" y1="125" x2="80" y2="135" stroke="#c4a000" strokeWidth="2" />
+          <circle cx="120" cy="95" r="4" fill="#cfeee3" />
+          <line x1="120" y1="95" x2="120" y2="115" stroke="#c4a000" strokeWidth="2" />
+          <circle cx="160" cy="100" r="4" fill="#cfeee3" />
+          <line x1="160" y1="100" x2="160" y2="90" stroke="#c4a000" strokeWidth="2" />
+          <circle cx="200" cy="55" r="4" fill="#cfeee3" />
+          <line x1="200" y1="55" x2="200" y2="70" stroke="#c4a000" strokeWidth="2" />
+          <text x="150" y="185" textAnchor="middle" fill="#c4a000" className="text-xs" style={{ fontFamily: 'monospace' }}>MINIMIZE ERROR</text>
         </svg>
       </div>
     ),
   },
   {
     id: 4,
-    title: "Multiple Features",
-    icon: <TrendingUp className="w-5 h-5" />,
+    title: "MULTIVARIATE ANALYSIS",
+    icon: <TrendingUp className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          Real predictions often use{" "}
-          <span className="font-semibold text-cyan-400">
-            multiple features
-          </span>
-          . House price depends on size AND bedrooms AND location AND age...
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Real-world predictions utilize multiple input features simultaneously.
         </p>
-        <div className="bg-slate-800/80 rounded-lg p-4 font-mono text-sm overflow-x-auto border border-slate-700/50">
-          <p className="text-white">
-            <span className="text-cyan-400">price</span> ={" "}
-            <span className="text-green-400">150</span> × size +{" "}
-            <span className="text-green-400">5000</span> × bedrooms +{" "}
-            <span className="text-red-400">-2000</span> × age +{" "}
-            <span className="text-amber-400">50000</span>
+        <div className="bg-terminal-black p-4 font-mono text-xs overflow-x-auto border-2 border-terminal-black">
+          <p className="text-terminal-mint">
+            <span className="text-terminal-accent">price</span> =
+            <span className="text-terminal-warning"> 150</span>*size +
+            <span className="text-terminal-warning"> 5000</span>*beds +
+            <span className="text-red-400"> -2000</span>*age +
+            <span className="text-terminal-mint"> 50000</span>
           </p>
         </div>
-        <p className="text-slate-400">
-          Each feature gets its own coefficient (weight). A positive coefficient
-          means the feature increases the prediction; negative decreases it.
-        </p>
-        <div className="bg-green-500/10 rounded-lg p-4 border border-green-500/20">
-          <p className="text-green-300 font-medium">
-            The coefficients tell you which features matter most and in what
-            direction!
+        <div className="bg-terminal-accent/10 border-2 border-terminal-accent p-3">
+          <p className="font-mono text-xs text-terminal-accent font-bold">
+            COEFFICIENTS INDICATE FEATURE IMPORTANCE AND DIRECTION OF INFLUENCE
           </p>
         </div>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full flex items-center justify-center">
-        <div className="space-y-4 w-full max-w-sm">
-          <div className="text-center mb-4">
-            <span className="text-lg font-semibold text-white">
-              Feature Importance
-            </span>
-          </div>
-          <div className="space-y-3">
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-slate-400">Size (sqft)</span>
-                <span className="font-medium text-green-400">+$150/sqft</span>
-              </div>
-              <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full" style={{ width: "85%" }}></div>
-              </div>
+      <div className="bg-terminal-black p-6 h-full flex items-center justify-center">
+        <div className="space-y-3 w-full max-w-sm font-mono text-xs">
+          <div className="text-terminal-mint text-center font-bold mb-4">FEATURE WEIGHTS</div>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-terminal-grid">SIZE_SQFT</span>
+              <span className="text-terminal-accent font-bold">+$150/sqft</span>
             </div>
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-slate-400">Bedrooms</span>
-                <span className="font-medium text-green-400">+$5,000/room</span>
-              </div>
-              <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full" style={{ width: "60%" }}></div>
-              </div>
+            <div className="h-2 bg-terminal-grid"><div className="h-full bg-terminal-accent" style={{ width: "85%" }}></div></div>
+            <div className="flex justify-between items-center">
+              <span className="text-terminal-grid">BEDROOMS</span>
+              <span className="text-terminal-accent font-bold">+$5,000/room</span>
             </div>
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-slate-400">Age (years)</span>
-                <span className="font-medium text-red-400">-$2,000/year</span>
-              </div>
-              <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full" style={{ width: "40%" }}></div>
-              </div>
+            <div className="h-2 bg-terminal-grid"><div className="h-full bg-terminal-accent" style={{ width: "60%" }}></div></div>
+            <div className="flex justify-between items-center">
+              <span className="text-terminal-grid">AGE_YEARS</span>
+              <span className="text-red-400 font-bold">-$2,000/year</span>
             </div>
+            <div className="h-2 bg-terminal-grid"><div className="h-full bg-red-400" style={{ width: "40%" }}></div></div>
           </div>
         </div>
       </div>
@@ -289,64 +197,46 @@ const storySteps: StoryStep[] = [
   },
   {
     id: 5,
-    title: "Measuring Success",
-    icon: <CheckCircle className="w-5 h-5" />,
+    title: "PERFORMANCE METRICS",
+    icon: <CheckCircle className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          How do we know if our model is good? We use{" "}
-          <span className="font-semibold text-cyan-400">metrics</span> to
-          measure prediction accuracy.
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Model evaluation through standardized metrics.
         </p>
-        <div className="space-y-3">
-          <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-            <p className="font-semibold text-white mb-1">
-              R² Score (0 to 1)
-            </p>
-            <p className="text-sm text-slate-400">
-              How much variance in the data our model explains. 1.0 = perfect,
-              0.0 = useless.
-            </p>
+        <div className="space-y-2">
+          <div className="bg-terminal-panel border-2 border-terminal-black p-3">
+            <p className="font-mono text-xs font-bold text-terminal-black">R² SCORE (0-1)</p>
+            <p className="font-mono text-xs text-terminal-black/70">Variance explained by model. 1.0 = perfect fit.</p>
           </div>
-          <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-            <p className="font-semibold text-white mb-1">RMSE</p>
-            <p className="text-sm text-slate-400">
-              Root Mean Squared Error - average prediction error in the same
-              units as our target (dollars).
-            </p>
+          <div className="bg-terminal-panel border-2 border-terminal-black p-3">
+            <p className="font-mono text-xs font-bold text-terminal-black">RMSE</p>
+            <p className="font-mono text-xs text-terminal-black/70">Root Mean Squared Error. Same units as target.</p>
           </div>
-          <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-            <p className="font-semibold text-white mb-1">MAE</p>
-            <p className="text-sm text-slate-400">
-              Mean Absolute Error - simpler average of all absolute errors.
-            </p>
+          <div className="bg-terminal-panel border-2 border-terminal-black p-3">
+            <p className="font-mono text-xs font-bold text-terminal-black">MAE</p>
+            <p className="font-mono text-xs text-terminal-black/70">Mean Absolute Error. Average prediction error.</p>
           </div>
         </div>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full flex items-center justify-center">
-        <div className="space-y-6 w-full max-w-xs">
+      <div className="bg-terminal-black p-6 h-full flex items-center justify-center">
+        <div className="space-y-4 w-full max-w-xs font-mono">
           <div className="text-center">
-            <div className="text-4xl font-bold text-cyan-400 mb-1">0.92</div>
-            <div className="text-slate-400">R² Score</div>
-            <div className="text-sm text-green-400 font-medium">Excellent!</div>
+            <div className="text-4xl font-bold text-terminal-accent">0.92</div>
+            <div className="text-xs text-terminal-grid">R² SCORE</div>
+            <div className="text-xs text-terminal-accent font-bold">EXCELLENT</div>
           </div>
-          <div className="h-px bg-slate-700" />
-          <div className="grid grid-cols-2 gap-4 text-center">
+          <div className="border-t border-terminal-grid/30 pt-4 grid grid-cols-2 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-white">$12,450</div>
-              <div className="text-sm text-slate-400">RMSE</div>
+              <div className="text-xl font-bold text-terminal-mint">$12,450</div>
+              <div className="text-xs text-terminal-grid">RMSE</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">$9,200</div>
-              <div className="text-sm text-slate-400">MAE</div>
+              <div className="text-xl font-bold text-terminal-mint">$9,200</div>
+              <div className="text-xs text-terminal-grid">MAE</div>
             </div>
-          </div>
-          <div className="bg-cyan-500/10 rounded-lg p-3 text-center border border-cyan-500/20">
-            <p className="text-sm text-cyan-300">
-              On average, predictions are within $9,200 of actual prices
-            </p>
           </div>
         </div>
       </div>
@@ -374,12 +264,12 @@ export default function ExplainerTab() {
             key={step.id}
             onClick={() => goToStep(index)}
             className={clsx(
-              "w-3 h-3 rounded-full transition-all",
+              "w-8 h-2 transition-all",
               index === currentStep
-                ? "bg-cyan-500 scale-125 shadow-lg shadow-cyan-500/50"
+                ? "bg-terminal-black"
                 : index < currentStep
-                ? "bg-cyan-500/50"
-                : "bg-slate-600"
+                ? "bg-terminal-accent"
+                : "bg-terminal-grid"
             )}
             aria-label={`Go to step ${index + 1}: ${step.title}`}
           />
@@ -388,24 +278,24 @@ export default function ExplainerTab() {
 
       {/* Step header */}
       <div className="text-center">
-        <div className="inline-flex items-center gap-2 bg-cyan-500/10 text-cyan-400 px-4 py-2 rounded-full text-sm font-medium mb-2 border border-cyan-500/20">
+        <div className="inline-flex items-center gap-2 bg-terminal-black text-terminal-mint px-4 py-2 font-mono text-xs uppercase tracking-terminal mb-4">
           {currentStory.icon}
-          Step {currentStep + 1} of {storySteps.length}
+          STEP {currentStep + 1} OF {storySteps.length}
         </div>
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="heading-terminal text-2xl text-terminal-black">
           {currentStory.title}
         </h2>
       </div>
 
       {/* Content grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" key={currentStep}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-fade-in" key={currentStep}>
         {/* Text content */}
-        <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 p-6">
+        <div className="bg-terminal-panel border-2 border-terminal-black p-6">
           {currentStory.content}
         </div>
 
         {/* Visual */}
-        <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 p-2 min-h-[300px]">
+        <div className="border-2 border-terminal-black min-h-[300px]">
           {currentStory.visual}
         </div>
       </div>
@@ -416,17 +306,17 @@ export default function ExplainerTab() {
           onClick={() => goToStep(currentStep - 1)}
           disabled={currentStep === 0}
           className={clsx(
-            "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
+            "flex items-center gap-2 px-4 py-2 font-mono text-xs uppercase tracking-terminal border-2 transition-colors",
             currentStep === 0
-              ? "text-slate-600 cursor-not-allowed"
-              : "text-slate-300 hover:bg-slate-800"
+              ? "border-terminal-grid text-terminal-grid cursor-not-allowed"
+              : "border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint"
           )}
         >
-          <ChevronLeft className="w-5 h-5" />
-          Previous
+          <ChevronLeft className="w-4 h-4" />
+          PREV
         </button>
 
-        <span className="text-sm text-slate-500">
+        <span className="font-mono text-xs text-terminal-black/50">
           {currentStep + 1} / {storySteps.length}
         </span>
 
@@ -434,25 +324,25 @@ export default function ExplainerTab() {
           onClick={() => goToStep(currentStep + 1)}
           disabled={currentStep === storySteps.length - 1}
           className={clsx(
-            "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
+            "flex items-center gap-2 px-4 py-2 font-mono text-xs uppercase tracking-terminal border-2 transition-colors",
             currentStep === storySteps.length - 1
-              ? "text-slate-600 cursor-not-allowed"
-              : "bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-lg hover:shadow-cyan-500/25"
+              ? "border-terminal-grid text-terminal-grid cursor-not-allowed"
+              : "border-terminal-black bg-terminal-black text-terminal-mint hover:bg-terminal-accent hover:border-terminal-accent"
           )}
         >
-          Next
-          <ChevronRight className="w-5 h-5" />
+          NEXT
+          <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
       {/* End CTA */}
       {currentStep === storySteps.length - 1 && (
-        <div className="text-center py-6 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-xl border border-cyan-500/20">
-          <p className="text-lg font-semibold text-white mb-2">
-            Ready to try it yourself?
+        <div className="text-center py-6 bg-terminal-accent/10 border-2 border-terminal-accent">
+          <p className="font-mono text-sm font-bold text-terminal-black mb-2">
+            THEORY COMPLETE
           </p>
-          <p className="text-slate-400 mb-4">
-            Switch to the &quot;Try It With Data&quot; tab to upload your own dataset!
+          <p className="font-mono text-xs text-terminal-black/70">
+            PROCEED TO &quot;EXECUTE MODEL&quot; TAB TO TRAIN WITH YOUR DATA
           </p>
         </div>
       )}
