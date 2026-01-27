@@ -2,6 +2,7 @@
 
 import { Terminal, Database, Cpu, ArrowRight, AlertTriangle } from "lucide-react";
 import ModelCard from "@/components/ModelCard";
+import HeroAnimation from "@/components/HeroAnimation";
 
 const models = [
   {
@@ -63,52 +64,84 @@ const procedures = [
 
 function HeroSection() {
   return (
-    <section className="relative py-20 px-4">
-      <div className="max-w-5xl mx-auto">
-        {/* System Status */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-3 h-3 bg-terminal-accent animate-pulse" />
-          <span className="font-mono text-xs uppercase tracking-terminal text-terminal-black">
-            SYSTEM ONLINE // ALL MODULES OPERATIONAL
-          </span>
+    <section className="relative py-12 md:py-20 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* Left Content */}
+          <div>
+            {/* System Status */}
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-3 h-3 bg-terminal-accent animate-pulse" />
+              <span className="font-mono text-xs uppercase tracking-terminal text-terminal-black">
+                SYSTEM ONLINE // ALL MODULES OPERATIONAL
+              </span> <br></br>
+              <span className="font-mono text-xs uppercase tracking-terminal text-terminal-black">
+    <a
+      href="https://x.com/techwith_ram"
+      target="_blank"
+      className="
+        font-mono text-xs uppercase tracking-terminal
+        text-terminal-black
+        px-2 py-1
+        border-2 border-transparent
+        transition-all duration-150
+        hover:bg-terminal-black
+        hover:text-terminal-mint
+        hover:border-terminal-black
+        hover:shadow-[inset_0_0_0_1px_rgba(0,0,0,0.3)]
+        cursor-crosshair
+      "
+      >
+  DESIGNED BY RAMAKRUSHNA
+</a>
+              </span>
+            </div>
+
+            {/* Main Title */}
+            <h1 className="heading-terminal text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-terminal-black mb-6 leading-tight">
+              MACHINE
+              <br />
+              LEARNING
+              <br />
+              <span className="text-terminal-accent">TERMINAL</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="font-mono text-sm md:text-base text-terminal-black/70 max-w-xl mb-10 leading-relaxed">
+              INTERACTIVE RESEARCH INTERFACE FOR ALGORITHMIC ANALYSIS.
+              <br />
+              TRAIN MODELS. ANALYZE DATA. GENERATE CODE.
+              <br />
+              NO ACCOUNTS REQUIRED. NO DATA RETENTION.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href="#models"
+                className="btn-terminal text-base px-6 py-3"
+              >
+                ACCESS MODELS
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="#procedures"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 font-mono font-bold text-xs uppercase tracking-terminal text-terminal-black border-2 border-terminal-black hover:bg-terminal-black hover:text-terminal-mint transition-all"
+              >
+                VIEW PROCEDURES
+              </a>
+            </div>
+          </div>
+
+          {/* Right Animation */}
+          <div className="hidden lg:block">
+            <div className="border-2 border-terminal-black bg-terminal-panel/30 h-[450px] relative overflow-hidden">
+              <HeroAnimation />
+            </div>
+          </div>
         </div>
 
-        {/* Main Title */}
-        <h1 className="heading-terminal text-5xl md:text-7xl lg:text-8xl text-terminal-black mb-6 leading-tight">
-          MACHINE
-          <br />
-          LEARNING
-          <br />
-          <span className="text-terminal-accent">TERMINAL</span>
-        </h1>
-
-        {/* Subtitle */}
-        <p className="font-mono text-sm md:text-base text-terminal-black/70 max-w-2xl mb-10 leading-relaxed">
-          INTERACTIVE RESEARCH INTERFACE FOR ALGORITHMIC ANALYSIS.
-          <br />
-          TRAIN MODELS. ANALYZE DATA. GENERATE CODE.
-          <br />
-          NO ACCOUNTS REQUIRED. NO DATA RETENTION.
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <a
-            href="#models"
-            className="btn-terminal text-base px-6 py-3"
-          >
-            ACCESS MODELS
-            <ArrowRight className="w-4 h-4" />
-          </a>
-          <a
-            href="#procedures"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 font-mono font-bold text-xs uppercase tracking-terminal text-terminal-black border-2 border-terminal-black hover:bg-terminal-black hover:text-terminal-mint transition-all"
-          >
-            VIEW PROCEDURES
-          </a>
-        </div>
-
-        {/* Warning Notice */}
+        {/* Warning Notice - Full Width Below */}
         <div className="mt-12 p-4 border-2 border-terminal-warning bg-terminal-warning/10 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-terminal-warning flex-shrink-0 mt-0.5" />
           <p className="font-mono text-xs text-terminal-black leading-relaxed">

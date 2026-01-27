@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default function RootLayout({
           <header className="fixed top-0 left-0 right-0 z-50 bg-terminal-panel border-b-2 border-terminal-black">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-14">
-                <a href="/" className="flex items-center gap-3 group">
+                <Link href="/" className="flex items-center gap-3 group">
                   {/* Logo */}
                   <div className="w-8 h-8 bg-terminal-black flex items-center justify-center">
                     <svg
@@ -45,7 +46,7 @@ export default function RootLayout({
                   <span className="font-mono font-bold text-terminal-black text-sm uppercase tracking-terminal hidden sm:block">
                     ML TERMINAL
                   </span>
-                </a>
+                </Link>
 
                 <nav className="flex items-center gap-4">
                   <a
@@ -106,14 +107,14 @@ export default function RootLayout({
                   <h4 className="font-mono font-bold text-xs uppercase tracking-terminal mb-4 text-terminal-mint">AVAILABLE MODELS</h4>
                   <ul className="space-y-2 text-xs font-mono">
                     <li>
-                      <a href="/models/linear-regression" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
+                      <Link href="/models/linear-regression" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
                         &gt; LINEAR_REGRESSION
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a href="/models/logistic-regression" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
+                      <Link href="/models/logistic-regression" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
                         &gt; LOGISTIC_REGRESSION
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <span className="text-terminal-grid opacity-50">&gt; KNN [PENDING]</span>
