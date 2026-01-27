@@ -23,47 +23,41 @@ interface StoryStep {
 const storySteps: StoryStep[] = [
   {
     id: 1,
-    title: "The Problem",
-    icon: <Target className="w-5 h-5" />,
+    title: "PROBLEM DEFINITION",
+    icon: <Target className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          Imagine you&apos;re a doctor analyzing patient data. You need to answer:{" "}
-          <span className="font-semibold text-purple-400">
-            &quot;Will this patient develop diabetes?&quot;
-          </span>
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          SCENARIO: Medical diagnosis prediction. Input: patient metrics. Output: binary classification (0 or 1).
         </p>
-        <p className="text-slate-400">
-          This isn&apos;t about predicting a number - it&apos;s about predicting a{" "}
-          <strong className="text-white">category</strong>: Yes or No, True or
-          False, 1 or 0.
+        <p className="font-mono text-xs text-terminal-black/70">
+          Objective: Predict categorical outcomes. Not continuous values - discrete class membership.
         </p>
-        <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/20">
-          <p className="text-purple-300 font-medium">
-            This is a classification problem: predicting which category
-            something belongs to based on its features.
+        <div className="bg-terminal-accent/10 border-2 border-terminal-accent p-4">
+          <p className="font-mono text-xs text-terminal-accent font-bold">
+            CLASSIFICATION: BINARY PROBLEM // CATEGORICAL OUTPUT // SUPERVISED LEARNING
           </p>
         </div>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full flex items-center justify-center">
-        <div className="space-y-3 w-full max-w-xs">
-          <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600/50">
-            <span className="text-slate-400">BMI: 32, Age: 55</span>
-            <span className="font-semibold text-red-400">Diabetic</span>
+      <div className="bg-terminal-black p-6 h-full flex items-center justify-center">
+        <div className="space-y-2 w-full max-w-xs font-mono text-xs">
+          <div className="flex items-center justify-between p-2 border border-terminal-grid text-terminal-mint">
+            <span>BMI: 32, AGE: 55</span>
+            <span className="font-bold text-red-400">CLASS_1</span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600/50">
-            <span className="text-slate-400">BMI: 22, Age: 28</span>
-            <span className="font-semibold text-green-400">Healthy</span>
+          <div className="flex items-center justify-between p-2 border border-terminal-grid text-terminal-mint">
+            <span>BMI: 22, AGE: 28</span>
+            <span className="font-bold text-terminal-accent">CLASS_0</span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600/50">
-            <span className="text-slate-400">BMI: 28, Age: 45</span>
-            <span className="font-semibold text-red-400">Diabetic</span>
+          <div className="flex items-center justify-between p-2 border border-terminal-grid text-terminal-mint">
+            <span>BMI: 28, AGE: 45</span>
+            <span className="font-bold text-red-400">CLASS_1</span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-purple-500/10 rounded-lg border-2 border-purple-500/30 border-dashed">
-            <span className="text-purple-400">BMI: 26, Age: 40</span>
-            <span className="font-semibold text-purple-400">???</span>
+          <div className="flex items-center justify-between p-2 border-2 border-dashed border-terminal-warning text-terminal-warning">
+            <span>BMI: 26, AGE: 40</span>
+            <span className="font-bold">???</span>
           </div>
         </div>
       </div>
@@ -71,299 +65,213 @@ const storySteps: StoryStep[] = [
   },
   {
     id: 2,
-    title: "Why Not Linear Regression?",
-    icon: <Binary className="w-5 h-5" />,
+    title: "LINEAR LIMITATION",
+    icon: <Binary className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          Linear regression predicts{" "}
-          <span className="font-semibold text-purple-400">
-            any number
-          </span>{" "}
-          - but we need a probability between 0 and 1!
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Linear regression outputs unbounded values. Classification requires probability range [0, 1].
         </p>
-        <p className="text-slate-400">
-          A straight line can predict values like -0.5 or 1.7, which don&apos;t
-          make sense as probabilities.
-        </p>
-        <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-          <p className="font-medium text-white mb-2">We need a function that:</p>
-          <ul className="space-y-2 text-slate-400">
+        <div className="bg-terminal-panel border-2 border-terminal-black p-4 space-y-2">
+          <p className="font-mono text-xs font-bold text-terminal-black">REQUIREMENTS:</p>
+          <ul className="space-y-1 font-mono text-xs text-terminal-black/80">
             <li className="flex items-start gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
-              Always outputs values between 0 and 1
+              <CheckCircle className="w-3 h-3 text-terminal-accent mt-0.5 flex-shrink-0" />
+              Output bounded: 0 ≤ p ≤ 1
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
-              Creates a smooth S-shaped curve
+              <CheckCircle className="w-3 h-3 text-terminal-accent mt-0.5 flex-shrink-0" />
+              Smooth transition curve
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
-              Can represent probability of class membership
+              <CheckCircle className="w-3 h-3 text-terminal-accent mt-0.5 flex-shrink-0" />
+              Interpretable as probability
             </li>
           </ul>
         </div>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full">
+      <div className="bg-terminal-black p-6 h-full">
         <svg viewBox="0 0 300 200" className="w-full h-full">
-          {/* Axes */}
-          <line x1="40" y1="160" x2="280" y2="160" stroke="#475569" strokeWidth="2" />
-          <line x1="40" y1="160" x2="40" y2="20" stroke="#475569" strokeWidth="2" />
-
-          {/* 0 and 1 lines */}
-          <line x1="40" y1="140" x2="280" y2="140" stroke="#475569" strokeWidth="1" strokeDasharray="4,4" />
-          <line x1="40" y1="40" x2="280" y2="40" stroke="#475569" strokeWidth="1" strokeDasharray="4,4" />
-          <text x="25" y="145" className="fill-slate-500 text-xs">0</text>
-          <text x="25" y="45" className="fill-slate-500 text-xs">1</text>
-
-          {/* Linear regression line (bad) */}
+          <line x1="40" y1="160" x2="280" y2="160" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="40" y1="160" x2="40" y2="20" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="40" y1="140" x2="280" y2="140" stroke="#d4d4c8" strokeWidth="1" strokeDasharray="4,4" />
+          <line x1="40" y1="40" x2="280" y2="40" stroke="#d4d4c8" strokeWidth="1" strokeDasharray="4,4" />
+          <text x="25" y="145" fill="#d4d4c8" style={{ fontFamily: 'monospace', fontSize: '10px' }}>0</text>
+          <text x="25" y="45" fill="#d4d4c8" style={{ fontFamily: 'monospace', fontSize: '10px' }}>1</text>
           <line x1="50" y1="170" x2="270" y2="10" stroke="#ef4444" strokeWidth="2" opacity="0.6" />
-
-          {/* Problem areas */}
-          <rect x="50" y="5" width="60" height="35" fill="#ef4444" opacity="0.2" rx="4" />
-          <rect x="210" y="160" width="60" height="35" fill="#ef4444" opacity="0.2" rx="4" />
-
-          {/* Labels */}
-          <text x="80" y="25" textAnchor="middle" className="fill-red-400 text-xs">&gt;1?</text>
-          <text x="240" y="180" textAnchor="middle" className="fill-red-400 text-xs">&lt;0?</text>
-
-          {/* Legend */}
-          <line x1="120" y1="185" x2="150" y2="185" stroke="#ef4444" strokeWidth="2" />
-          <text x="155" y="189" className="fill-slate-400 text-xs">Linear (invalid)</text>
+          <rect x="50" y="5" width="60" height="35" fill="#ef4444" opacity="0.2" />
+          <rect x="210" y="160" width="60" height="35" fill="#ef4444" opacity="0.2" />
+          <text x="80" y="25" textAnchor="middle" fill="#ef4444" style={{ fontFamily: 'monospace', fontSize: '10px' }}>&gt;1?</text>
+          <text x="240" y="180" textAnchor="middle" fill="#ef4444" style={{ fontFamily: 'monospace', fontSize: '10px' }}>&lt;0?</text>
+          <text x="200" y="195" fill="#ef4444" style={{ fontFamily: 'monospace', fontSize: '9px' }}>LINEAR: INVALID</text>
         </svg>
       </div>
     ),
   },
   {
     id: 3,
-    title: "The Sigmoid Function",
-    icon: <Sigma className="w-5 h-5" />,
+    title: "SIGMOID FUNCTION",
+    icon: <Sigma className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          Logistic Regression uses the{" "}
-          <span className="font-semibold text-purple-400">
-            sigmoid function
-          </span>{" "}
-          to squash any input into a probability between 0 and 1.
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Sigmoid function transforms linear output to probability space [0, 1].
         </p>
-        <div className="bg-slate-800/80 rounded-lg p-4 font-mono text-center text-lg border border-slate-700/50">
-          <span className="text-purple-400 font-bold">p</span> ={" "}
-          <span className="text-white">1 / (1 + e</span>
-          <sup className="text-amber-400">-z</sup>
-          <span className="text-white">)</span>
+        <div className="bg-terminal-black p-4 font-mono text-center text-base border-2 border-terminal-black">
+          <span className="text-terminal-accent font-bold">p</span>
+          <span className="text-terminal-mint"> = 1 / (1 + e</span>
+          <sup className="text-terminal-warning">-z</sup>
+          <span className="text-terminal-mint">)</span>
         </div>
-        <ul className="space-y-2 text-slate-400">
-          <li className="flex items-start gap-2">
-            <span className="text-purple-400 font-bold">p</span> = probability
-            (always between 0 and 1)
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-amber-400 font-bold">z</span> = linear
-            combination (w₁x₁ + w₂x₂ + ... + b)
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-white font-bold">e</span> = Euler&apos;s number
-            (~2.718)
-          </li>
+        <ul className="space-y-2 font-mono text-xs text-terminal-black/80">
+          <li><span className="text-terminal-accent font-bold">p</span> = probability output (0 to 1)</li>
+          <li><span className="text-terminal-warning font-bold">z</span> = linear combination (w₁x₁ + w₂x₂ + b)</li>
+          <li><span className="text-terminal-black font-bold">e</span> = Euler constant (~2.718)</li>
         </ul>
-        <div className="bg-green-500/10 rounded-lg p-4 border border-green-500/20">
-          <p className="text-green-300 font-medium">
-            When z is very negative → p ≈ 0 (unlikely)
-            <br />
-            When z is very positive → p ≈ 1 (likely)
+        <div className="bg-terminal-accent/10 border-2 border-terminal-accent p-3">
+          <p className="font-mono text-xs text-terminal-accent font-bold">
+            z → -∞: p → 0 // z → +∞: p → 1
           </p>
         </div>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full">
+      <div className="bg-terminal-black p-6 h-full">
         <svg viewBox="0 0 300 200" className="w-full h-full">
-          {/* Axes */}
-          <line x1="40" y1="100" x2="280" y2="100" stroke="#475569" strokeWidth="2" />
-          <line x1="160" y1="180" x2="160" y2="20" stroke="#475569" strokeWidth="2" />
-
-          {/* 0 and 1 lines */}
-          <line x1="40" y1="170" x2="280" y2="170" stroke="#475569" strokeWidth="1" strokeDasharray="4,4" />
-          <line x1="40" y1="30" x2="280" y2="30" stroke="#475569" strokeWidth="1" strokeDasharray="4,4" />
-          <text x="25" y="175" className="fill-slate-500 text-xs">0</text>
-          <text x="25" y="35" className="fill-slate-500 text-xs">1</text>
-          <text x="25" y="105" className="fill-slate-500 text-xs">0.5</text>
-
-          {/* Sigmoid curve */}
+          <line x1="40" y1="100" x2="280" y2="100" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="160" y1="180" x2="160" y2="20" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="40" y1="170" x2="280" y2="170" stroke="#d4d4c8" strokeWidth="1" strokeDasharray="4,4" />
+          <line x1="40" y1="30" x2="280" y2="30" stroke="#d4d4c8" strokeWidth="1" strokeDasharray="4,4" />
+          <text x="25" y="175" fill="#d4d4c8" style={{ fontFamily: 'monospace', fontSize: '10px' }}>0</text>
+          <text x="25" y="35" fill="#d4d4c8" style={{ fontFamily: 'monospace', fontSize: '10px' }}>1</text>
+          <text x="25" y="105" fill="#d4d4c8" style={{ fontFamily: 'monospace', fontSize: '10px' }}>0.5</text>
           <path
             d="M 40 168 Q 80 165 100 160 Q 120 150 140 120 Q 160 100 160 100 Q 160 100 180 80 Q 200 50 220 40 Q 260 32 280 32"
             fill="none"
-            stroke="#a855f7"
+            stroke="#1a5c3a"
             strokeWidth="3"
           />
-
-          {/* Decision threshold at 0.5 */}
-          <circle cx="160" cy="100" r="5" fill="#22c55e" />
-          <text x="175" y="95" className="fill-green-400 text-xs">threshold</text>
-
-          {/* Labels */}
-          <text x="160" y="195" textAnchor="middle" className="fill-slate-500 text-xs">
-            z (linear combination)
-          </text>
-          <text x="60" y="155" className="fill-slate-500 text-xs">Class 0</text>
-          <text x="240" y="55" className="fill-slate-500 text-xs">Class 1</text>
+          <circle cx="160" cy="100" r="5" fill="#c4a000" />
+          <text x="175" y="95" fill="#c4a000" style={{ fontFamily: 'monospace', fontSize: '9px' }}>THRESHOLD</text>
+          <text x="160" y="195" textAnchor="middle" fill="#d4d4c8" style={{ fontFamily: 'monospace', fontSize: '9px' }}>Z (LINEAR COMBINATION)</text>
         </svg>
       </div>
     ),
   },
   {
     id: 4,
-    title: "Making Decisions",
-    icon: <BarChart3 className="w-5 h-5" />,
+    title: "DECISION BOUNDARY",
+    icon: <BarChart3 className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          Once we have a probability, we need a{" "}
-          <span className="font-semibold text-purple-400">
-            decision boundary
-          </span>{" "}
-          to make a final prediction.
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Decision boundary separates classes based on probability threshold.
         </p>
-        <div className="bg-slate-800/80 rounded-lg p-4 space-y-3 border border-slate-700/50">
-          <p className="font-medium text-white">The decision rule:</p>
-          <div className="space-y-2 text-slate-400">
+        <div className="bg-terminal-panel border-2 border-terminal-black p-4 space-y-2">
+          <p className="font-mono text-xs font-bold text-terminal-black">DECISION RULE:</p>
+          <div className="space-y-2 font-mono text-xs text-terminal-black/80">
             <div className="flex items-center gap-3">
-              <span className="text-green-400">If p ≥ 0.5</span>
+              <span className="text-terminal-accent">IF p ≥ 0.5</span>
               <span>→</span>
-              <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">
-                Predict Class 1
+              <span className="bg-terminal-accent/20 text-terminal-accent px-2 py-1 border border-terminal-accent">
+                PREDICT CLASS_1
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-red-400">If p &lt; 0.5</span>
+              <span className="text-red-600">IF p &lt; 0.5</span>
               <span>→</span>
-              <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded">
-                Predict Class 0
+              <span className="bg-red-500/20 text-red-600 px-2 py-1 border border-red-600">
+                PREDICT CLASS_0
               </span>
             </div>
           </div>
         </div>
-        <p className="text-slate-400">
-          The threshold of 0.5 is common, but you can adjust it based on the
-          cost of different types of errors (false positives vs false negatives).
+        <p className="font-mono text-xs text-terminal-black/70">
+          Threshold adjustable based on error cost analysis.
         </p>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full">
+      <div className="bg-terminal-black p-6 h-full">
         <svg viewBox="0 0 300 200" className="w-full h-full">
-          {/* Axes */}
-          <line x1="40" y1="160" x2="280" y2="160" stroke="#475569" strokeWidth="2" />
-          <line x1="40" y1="160" x2="40" y2="20" stroke="#475569" strokeWidth="2" />
-
-          {/* Decision boundary line */}
-          <line x1="160" y1="20" x2="160" y2="160" stroke="#a855f7" strokeWidth="2" strokeDasharray="5,5" />
-
-          {/* Class 0 region */}
-          <rect x="40" y="20" width="120" height="140" fill="#ef4444" opacity="0.1" />
-          {/* Class 1 region */}
-          <rect x="160" y="20" width="120" height="140" fill="#22c55e" opacity="0.1" />
-
-          {/* Data points - Class 0 (red) */}
-          <circle cx="70" cy="60" r="6" fill="#ef4444" />
-          <circle cx="90" cy="100" r="6" fill="#ef4444" />
-          <circle cx="60" cy="130" r="6" fill="#ef4444" />
-          <circle cx="120" cy="80" r="6" fill="#ef4444" />
-          <circle cx="100" cy="140" r="6" fill="#ef4444" />
-
-          {/* Data points - Class 1 (green) */}
-          <circle cx="200" cy="50" r="6" fill="#22c55e" />
-          <circle cx="230" cy="90" r="6" fill="#22c55e" />
-          <circle cx="250" cy="60" r="6" fill="#22c55e" />
-          <circle cx="180" cy="120" r="6" fill="#22c55e" />
-          <circle cx="220" cy="140" r="6" fill="#22c55e" />
-
-          {/* Labels */}
-          <text x="100" y="180" textAnchor="middle" className="fill-red-400 text-xs font-medium">
-            Class 0
-          </text>
-          <text x="220" y="180" textAnchor="middle" className="fill-green-400 text-xs font-medium">
-            Class 1
-          </text>
-          <text x="160" y="15" textAnchor="middle" className="fill-purple-400 text-xs">
-            Decision Boundary
-          </text>
+          <line x1="40" y1="160" x2="280" y2="160" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="40" y1="160" x2="40" y2="20" stroke="#d4d4c8" strokeWidth="1" />
+          <line x1="160" y1="20" x2="160" y2="160" stroke="#c4a000" strokeWidth="2" strokeDasharray="5,5" />
+          <rect x="40" y="20" width="120" height="140" fill="#ef4444" opacity="0.15" />
+          <rect x="160" y="20" width="120" height="140" fill="#1a5c3a" opacity="0.15" />
+          <circle cx="70" cy="60" r="5" fill="#ef4444" />
+          <circle cx="90" cy="100" r="5" fill="#ef4444" />
+          <circle cx="60" cy="130" r="5" fill="#ef4444" />
+          <circle cx="120" cy="80" r="5" fill="#ef4444" />
+          <circle cx="100" cy="140" r="5" fill="#ef4444" />
+          <circle cx="200" cy="50" r="5" fill="#1a5c3a" />
+          <circle cx="230" cy="90" r="5" fill="#1a5c3a" />
+          <circle cx="250" cy="60" r="5" fill="#1a5c3a" />
+          <circle cx="180" cy="120" r="5" fill="#1a5c3a" />
+          <circle cx="220" cy="140" r="5" fill="#1a5c3a" />
+          <text x="100" y="180" textAnchor="middle" fill="#ef4444" style={{ fontFamily: 'monospace', fontSize: '10px', fontWeight: 'bold' }}>CLASS_0</text>
+          <text x="220" y="180" textAnchor="middle" fill="#1a5c3a" style={{ fontFamily: 'monospace', fontSize: '10px', fontWeight: 'bold' }}>CLASS_1</text>
+          <text x="160" y="15" textAnchor="middle" fill="#c4a000" style={{ fontFamily: 'monospace', fontSize: '9px' }}>BOUNDARY</text>
         </svg>
       </div>
     ),
   },
   {
     id: 5,
-    title: "Measuring Success",
-    icon: <CheckCircle className="w-5 h-5" />,
+    title: "PERFORMANCE METRICS",
+    icon: <CheckCircle className="w-4 h-4" />,
     content: (
       <div className="space-y-4">
-        <p className="text-lg text-slate-300 leading-relaxed">
-          For classification, we use different{" "}
-          <span className="font-semibold text-purple-400">metrics</span> than
-          regression to evaluate performance.
+        <p className="font-mono text-sm text-terminal-black leading-relaxed">
+          Classification metrics differ from regression evaluation.
         </p>
-        <div className="space-y-3">
-          <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-            <p className="font-semibold text-white mb-1">Accuracy</p>
-            <p className="text-sm text-slate-400">
-              Percentage of correct predictions overall.
-            </p>
+        <div className="space-y-2">
+          <div className="bg-terminal-panel border-2 border-terminal-black p-3">
+            <p className="font-mono text-xs font-bold text-terminal-black">ACCURACY</p>
+            <p className="font-mono text-xs text-terminal-black/70">Correct predictions / Total predictions</p>
           </div>
-          <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-            <p className="font-semibold text-white mb-1">Precision</p>
-            <p className="text-sm text-slate-400">
-              Of all positive predictions, how many were actually positive?
-            </p>
+          <div className="bg-terminal-panel border-2 border-terminal-black p-3">
+            <p className="font-mono text-xs font-bold text-terminal-black">PRECISION</p>
+            <p className="font-mono text-xs text-terminal-black/70">True positives / Predicted positives</p>
           </div>
-          <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-            <p className="font-semibold text-white mb-1">Recall</p>
-            <p className="text-sm text-slate-400">
-              Of all actual positives, how many did we correctly identify?
-            </p>
+          <div className="bg-terminal-panel border-2 border-terminal-black p-3">
+            <p className="font-mono text-xs font-bold text-terminal-black">RECALL</p>
+            <p className="font-mono text-xs text-terminal-black/70">True positives / Actual positives</p>
           </div>
-          <div className="bg-slate-800/80 rounded-lg p-4 border border-slate-700/50">
-            <p className="font-semibold text-white mb-1">F1 Score</p>
-            <p className="text-sm text-slate-400">
-              Harmonic mean of precision and recall - balances both.
-            </p>
+          <div className="bg-terminal-panel border-2 border-terminal-black p-3">
+            <p className="font-mono text-xs font-bold text-terminal-black">F1 SCORE</p>
+            <p className="font-mono text-xs text-terminal-black/70">Harmonic mean of precision and recall</p>
           </div>
         </div>
       </div>
     ),
     visual: (
-      <div className="bg-slate-800/50 rounded-xl p-6 h-full flex items-center justify-center">
-        <div className="space-y-4 w-full max-w-xs">
-          <div className="text-center mb-2">
-            <span className="text-lg font-semibold text-white">
-              Confusion Matrix
-            </span>
-          </div>
+      <div className="bg-terminal-black p-6 h-full flex items-center justify-center">
+        <div className="space-y-4 w-full max-w-xs font-mono">
+          <div className="text-center text-terminal-mint font-bold text-xs mb-4">CONFUSION MATRIX</div>
           <div className="grid grid-cols-2 gap-2">
-            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 text-center">
-              <div className="text-xl font-bold text-green-400">45</div>
-              <div className="text-xs text-slate-400">True Negative</div>
+            <div className="bg-terminal-accent/20 border-2 border-terminal-accent p-3 text-center">
+              <div className="text-xl font-bold text-terminal-accent">45</div>
+              <div className="text-xs text-terminal-grid">TRUE_NEG</div>
             </div>
-            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-center">
+            <div className="bg-red-500/20 border-2 border-red-500 p-3 text-center">
               <div className="text-xl font-bold text-red-400">5</div>
-              <div className="text-xs text-slate-400">False Positive</div>
+              <div className="text-xs text-terminal-grid">FALSE_POS</div>
             </div>
-            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-center">
+            <div className="bg-red-500/20 border-2 border-red-500 p-3 text-center">
               <div className="text-xl font-bold text-red-400">3</div>
-              <div className="text-xs text-slate-400">False Negative</div>
+              <div className="text-xs text-terminal-grid">FALSE_NEG</div>
             </div>
-            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 text-center">
-              <div className="text-xl font-bold text-green-400">47</div>
-              <div className="text-xs text-slate-400">True Positive</div>
+            <div className="bg-terminal-accent/20 border-2 border-terminal-accent p-3 text-center">
+              <div className="text-xl font-bold text-terminal-accent">47</div>
+              <div className="text-xs text-terminal-grid">TRUE_POS</div>
             </div>
           </div>
-          <div className="bg-purple-500/10 rounded-lg p-3 text-center border border-purple-500/20">
-            <p className="text-sm text-purple-300">
-              Accuracy: 92% (92/100 correct)
-            </p>
+          <div className="border-t border-terminal-grid/30 pt-3 text-center">
+            <div className="text-2xl font-bold text-terminal-mint">92%</div>
+            <div className="text-xs text-terminal-grid">ACCURACY</div>
           </div>
         </div>
       </div>
@@ -391,12 +299,12 @@ export default function LogisticExplainerTab() {
             key={step.id}
             onClick={() => goToStep(index)}
             className={clsx(
-              "w-3 h-3 rounded-full transition-all",
+              "w-8 h-2 transition-all",
               index === currentStep
-                ? "bg-purple-500 scale-125 shadow-lg shadow-purple-500/50"
+                ? "bg-terminal-black"
                 : index < currentStep
-                ? "bg-purple-500/50"
-                : "bg-slate-600"
+                ? "bg-terminal-accent"
+                : "bg-terminal-grid"
             )}
             aria-label={`Go to step ${index + 1}: ${step.title}`}
           />
@@ -405,24 +313,24 @@ export default function LogisticExplainerTab() {
 
       {/* Step header */}
       <div className="text-center">
-        <div className="inline-flex items-center gap-2 bg-purple-500/10 text-purple-400 px-4 py-2 rounded-full text-sm font-medium mb-2 border border-purple-500/20">
+        <div className="inline-flex items-center gap-2 bg-terminal-black text-terminal-mint px-4 py-2 font-mono text-xs uppercase tracking-terminal mb-4">
           {currentStory.icon}
-          Step {currentStep + 1} of {storySteps.length}
+          STEP {currentStep + 1} OF {storySteps.length}
         </div>
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="heading-terminal text-2xl text-terminal-black">
           {currentStory.title}
         </h2>
       </div>
 
       {/* Content grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" key={currentStep}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-fade-in" key={currentStep}>
         {/* Text content */}
-        <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 p-6">
+        <div className="bg-terminal-panel border-2 border-terminal-black p-6">
           {currentStory.content}
         </div>
 
         {/* Visual */}
-        <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 p-2 min-h-[300px]">
+        <div className="border-2 border-terminal-black min-h-[300px]">
           {currentStory.visual}
         </div>
       </div>
@@ -433,17 +341,17 @@ export default function LogisticExplainerTab() {
           onClick={() => goToStep(currentStep - 1)}
           disabled={currentStep === 0}
           className={clsx(
-            "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
+            "flex items-center gap-2 px-4 py-2 font-mono text-xs uppercase tracking-terminal border-2 transition-colors",
             currentStep === 0
-              ? "text-slate-600 cursor-not-allowed"
-              : "text-slate-300 hover:bg-slate-800"
+              ? "border-terminal-grid text-terminal-grid cursor-not-allowed"
+              : "border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint"
           )}
         >
-          <ChevronLeft className="w-5 h-5" />
-          Previous
+          <ChevronLeft className="w-4 h-4" />
+          PREV
         </button>
 
-        <span className="text-sm text-slate-500">
+        <span className="font-mono text-xs text-terminal-black/50">
           {currentStep + 1} / {storySteps.length}
         </span>
 
@@ -451,25 +359,25 @@ export default function LogisticExplainerTab() {
           onClick={() => goToStep(currentStep + 1)}
           disabled={currentStep === storySteps.length - 1}
           className={clsx(
-            "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors",
+            "flex items-center gap-2 px-4 py-2 font-mono text-xs uppercase tracking-terminal border-2 transition-colors",
             currentStep === storySteps.length - 1
-              ? "text-slate-600 cursor-not-allowed"
-              : "bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:shadow-lg hover:shadow-purple-500/25"
+              ? "border-terminal-grid text-terminal-grid cursor-not-allowed"
+              : "border-terminal-black bg-terminal-black text-terminal-mint hover:bg-terminal-accent hover:border-terminal-accent"
           )}
         >
-          Next
-          <ChevronRight className="w-5 h-5" />
+          NEXT
+          <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
       {/* End CTA */}
       {currentStep === storySteps.length - 1 && (
-        <div className="text-center py-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
-          <p className="text-lg font-semibold text-white mb-2">
-            Ready to try it yourself?
+        <div className="text-center py-6 bg-terminal-accent/10 border-2 border-terminal-accent">
+          <p className="font-mono text-sm font-bold text-terminal-black mb-2">
+            THEORY COMPLETE
           </p>
-          <p className="text-slate-400 mb-4">
-            Switch to the &quot;Try It With Data&quot; tab to upload your own dataset!
+          <p className="font-mono text-xs text-terminal-black/70">
+            PROCEED TO &quot;EXECUTE MODEL&quot; TAB TO TRAIN WITH YOUR DATA
           </p>
         </div>
       )}

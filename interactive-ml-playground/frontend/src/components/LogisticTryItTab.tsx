@@ -41,17 +41,14 @@ export default function LogisticTryItTab() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Data state
   const [uploadedData, setUploadedData] = useState<DataUploadResponse | null>(null);
   const [csvText, setCsvText] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Configuration state
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [targetColumn, setTargetColumn] = useState<string>("");
   const [testSize, setTestSize] = useState(0.2);
 
-  // Results state
   const [trainResult, setTrainResult] = useState<LogisticTrainResponse | null>(null);
   const [activeResultTab, setActiveResultTab] = useState<"metrics" | "code" | "predictions">("metrics");
 
@@ -76,7 +73,6 @@ export default function LogisticTryItTab() {
       const response = await apiClient.uploadCsv(file);
       setUploadedData(response);
       setStep("configure");
-
       const text = await file.text();
       setCsvText(text);
     } catch (err) {
@@ -112,11 +108,8 @@ export default function LogisticTryItTab() {
 
   const toggleFeature = (column: string) => {
     if (column === targetColumn) return;
-
     setSelectedFeatures((prev) =>
-      prev.includes(column)
-        ? prev.filter((c) => c !== column)
-        : [...prev, column]
+      prev.includes(column) ? prev.filter((c) => c !== column) : [...prev, column]
     );
   };
 
@@ -153,13 +146,7 @@ export default function LogisticTryItTab() {
         data.push(row);
       }
 
-      const result = await apiClient.trainLogisticRegression(
-        data,
-        selectedFeatures,
-        targetColumn,
-        testSize
-      );
-
+      const result = await apiClient.trainLogisticRegression(data, selectedFeatures, targetColumn, testSize);
       setTrainResult(result);
       setStep("results");
     } catch (err) {
@@ -174,50 +161,45 @@ export default function LogisticTryItTab() {
       {/* Progress Steps */}
       <div className="flex items-center justify-center gap-4">
         {[
-          { id: "upload", label: "Upload Data", icon: Upload },
-          { id: "configure", label: "Configure", icon: Table },
-          { id: "results", label: "Results", icon: BarChart3 },
+          { id: "upload", label: "DATA_INPUT", icon: Upload },
+          { id: "configure", label: "CONFIGURE", icon: Table },
+          { id: "results", label: "RESULTS", icon: BarChart3 },
         ].map((s, index) => (
           <div key={s.id} className="flex items-center gap-2">
             <div
               className={clsx(
-                "w-10 h-10 rounded-full flex items-center justify-center transition-colors",
+                "w-10 h-10 flex items-center justify-center transition-colors border-2",
                 step === s.id
-                  ? "bg-purple-500 text-white"
+                  ? "bg-terminal-black text-terminal-mint border-terminal-black"
                   : ["configure", "results"].indexOf(step) > ["upload", "configure", "results"].indexOf(s.id)
-                  ? "bg-purple-500/30 text-purple-300"
-                  : "bg-slate-700 text-slate-400"
+                  ? "bg-terminal-accent/20 text-terminal-accent border-terminal-accent"
+                  : "bg-terminal-panel text-terminal-black/50 border-terminal-grid"
               )}
             >
               <s.icon className="w-5 h-5" />
             </div>
             <span
               className={clsx(
-                "text-sm font-medium hidden sm:block",
-                step === s.id ? "text-purple-400" : "text-slate-500"
+                "font-mono text-xs uppercase tracking-terminal hidden sm:block",
+                step === s.id ? "text-terminal-black font-bold" : "text-terminal-black/50"
               )}
             >
               {s.label}
             </span>
-            {index < 2 && (
-              <div className="w-8 h-px bg-slate-700 hidden sm:block" />
-            )}
+            {index < 2 && <div className="w-8 h-0.5 bg-terminal-grid hidden sm:block" />}
           </div>
         ))}
       </div>
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+        <div className="bg-red-500/10 border-2 border-red-500 p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-red-400 font-medium">Error</p>
-            <p className="text-red-300 text-sm">{error}</p>
+            <p className="font-mono text-xs font-bold text-red-600">ERROR</p>
+            <p className="font-mono text-xs text-red-600">{error}</p>
           </div>
-          <button
-            onClick={() => setError(null)}
-            className="ml-auto text-red-400 hover:text-red-300"
-          >
+          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-600">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -225,77 +207,64 @@ export default function LogisticTryItTab() {
 
       {/* Step 1: Upload */}
       {step === "upload" && (
-        <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 p-6">
-          <h3 className="text-lg font-semibold text-white mb-6">
-            Load Your Data
+        <div className="bg-terminal-panel border-2 border-terminal-black p-6">
+          <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black mb-6">
+            LOAD DATA
           </h3>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* File Upload */}
             <div className="space-y-4">
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-600 rounded-xl p-8 text-center cursor-pointer hover:border-purple-500/50 hover:bg-purple-500/5 transition-colors"
+                className="border-2 border-dashed border-terminal-black p-8 text-center cursor-pointer hover:bg-terminal-black hover:text-terminal-mint transition-colors"
               >
-                <Upload className="w-12 h-12 text-slate-500 mx-auto mb-4" />
-                <p className="text-white font-medium mb-2">
-                  Click to upload a CSV file
+                <Upload className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p className="font-mono text-xs font-bold uppercase tracking-terminal mb-2">
+                  CLICK TO UPLOAD CSV
                 </p>
-                <p className="text-slate-400 text-sm">
-                  or drag and drop
-                </p>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
+                <p className="font-mono text-xs opacity-50">OR DRAG AND DROP</p>
+                <input ref={fileInputRef} type="file" accept=".csv" onChange={handleFileUpload} className="hidden" />
               </div>
             </div>
 
-            {/* Paste CSV */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <p className="text-white font-medium">Or paste CSV data:</p>
+                <p className="font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black">
+                  OR PASTE CSV:
+                </p>
                 <button
                   onClick={loadSampleData}
-                  className="text-sm text-purple-400 hover:text-purple-300 font-medium"
+                  className="font-mono text-xs font-bold uppercase tracking-terminal text-terminal-accent hover:underline"
                 >
-                  Load sample data
+                  LOAD SAMPLE
                 </button>
               </div>
               <textarea
                 value={csvText}
                 onChange={(e) => setCsvText(e.target.value)}
-                placeholder="Paste your CSV data here..."
-                className="w-full h-48 px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-mono text-sm resize-none"
+                placeholder="PASTE CSV DATA HERE..."
+                className="w-full h-48 px-4 py-3 bg-terminal-panel border-2 border-terminal-black text-terminal-black placeholder-terminal-black/30 font-mono text-xs resize-none focus:outline-none focus:border-terminal-accent"
               />
               <button
                 onClick={handlePasteCSV}
                 disabled={loading || !csvText.trim()}
                 className={clsx(
-                  "w-full py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2",
+                  "w-full py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 transition-colors flex items-center justify-center gap-2",
                   csvText.trim()
-                    ? "bg-purple-500 text-white hover:bg-purple-600"
-                    : "bg-slate-700 text-slate-500 cursor-not-allowed"
+                    ? "bg-terminal-black text-terminal-mint border-terminal-black hover:bg-terminal-accent hover:border-terminal-accent"
+                    : "bg-terminal-grid text-terminal-black/50 border-terminal-grid cursor-not-allowed"
                 )}
               >
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <FileText className="w-5 h-5" />
-                )}
-                Parse CSV
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
+                PARSE CSV
               </button>
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-purple-500/10 border border-purple-500/20 rounded-lg">
-            <p className="text-sm text-purple-300">
-              <strong>Tip:</strong> For classification, your target column should have
-              binary values (0/1, Yes/No, True/False). The sample data includes a diabetes
-              prediction dataset.
+          <div className="mt-6 p-4 bg-terminal-accent/10 border-2 border-terminal-accent">
+            <p className="font-mono text-xs text-terminal-accent">
+              <span className="font-bold">NOTE:</span> TARGET COLUMN SHOULD CONTAIN BINARY VALUES (0/1).
+              SAMPLE DATA: DIABETES PREDICTION DATASET.
             </p>
           </div>
         </div>
@@ -304,38 +273,31 @@ export default function LogisticTryItTab() {
       {/* Step 2: Configure */}
       {step === "configure" && uploadedData && (
         <div className="space-y-6">
-          {/* Data Preview */}
-          <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 p-6">
+          <div className="bg-terminal-panel border-2 border-terminal-black p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">
-                Data Preview
+              <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black">
+                DATA PREVIEW
               </h3>
-              <span className="text-sm text-slate-400">
-                {uploadedData.row_count} rows, {uploadedData.columns.length} columns
+              <span className="font-mono text-xs text-terminal-black/50">
+                {uploadedData.row_count} ROWS // {uploadedData.columns.length} COLS
               </span>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-900/50">
+              <table className="w-full">
+                <thead>
                   <tr>
                     {uploadedData.columns.map((col) => (
-                      <th
-                        key={col}
-                        className="px-4 py-2 text-left text-slate-300 font-semibold whitespace-nowrap"
-                      >
+                      <th key={col} className="px-4 py-2 text-left font-mono text-xs font-bold uppercase tracking-terminal">
                         {col}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-700/50">
+                <tbody>
                   {uploadedData.preview.slice(0, 5).map((row, idx) => (
                     <tr key={idx}>
                       {uploadedData.columns.map((col) => (
-                        <td
-                          key={col}
-                          className="px-4 py-2 text-slate-400 whitespace-nowrap"
-                        >
+                        <td key={col} className="px-4 py-2 font-mono text-xs">
                           {String(row[col] ?? "")}
                         </td>
                       ))}
@@ -346,17 +308,15 @@ export default function LogisticTryItTab() {
             </div>
           </div>
 
-          {/* Column Selection */}
-          <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">
-              Configure Model
+          <div className="bg-terminal-panel border-2 border-terminal-black p-6">
+            <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black mb-4">
+              CONFIGURE MODEL
             </h3>
 
             <div className="space-y-6">
-              {/* Feature Selection */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-3">
-                  Select Feature Columns (inputs)
+                <label className="block font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black mb-3">
+                  SELECT FEATURES (INPUTS)
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {uploadedData.numeric_columns.map((col) => (
@@ -365,30 +325,27 @@ export default function LogisticTryItTab() {
                       onClick={() => toggleFeature(col)}
                       disabled={col === targetColumn}
                       className={clsx(
-                        "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                        "px-4 py-2 font-mono text-xs font-bold uppercase tracking-terminal border-2 transition-colors",
                         col === targetColumn
-                          ? "bg-slate-700 text-slate-500 cursor-not-allowed"
+                          ? "bg-terminal-grid text-terminal-black/50 border-terminal-grid cursor-not-allowed"
                           : selectedFeatures.includes(col)
-                          ? "bg-purple-500 text-white"
-                          : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                          ? "bg-terminal-black text-terminal-mint border-terminal-black"
+                          : "bg-terminal-panel text-terminal-black border-terminal-black hover:bg-terminal-black hover:text-terminal-mint"
                       )}
                     >
                       {col}
-                      {selectedFeatures.includes(col) && (
-                        <CheckCircle className="inline w-4 h-4 ml-1" />
-                      )}
+                      {selectedFeatures.includes(col) && <CheckCircle className="inline w-3 h-3 ml-1" />}
                     </button>
                   ))}
                 </div>
-                <p className="text-sm text-slate-500 mt-2">
-                  Selected: {selectedFeatures.length} feature(s)
+                <p className="font-mono text-xs text-terminal-black/50 mt-2">
+                  SELECTED: {selectedFeatures.length} FEATURE(S)
                 </p>
               </div>
 
-              {/* Target Selection */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-3">
-                  Select Target Column (what to predict - should be 0/1)
+                <label className="block font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black mb-3">
+                  SELECT TARGET (OUTPUT - BINARY 0/1)
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {uploadedData.numeric_columns.map((col) => (
@@ -397,27 +354,24 @@ export default function LogisticTryItTab() {
                       onClick={() => setTarget(col)}
                       disabled={selectedFeatures.includes(col)}
                       className={clsx(
-                        "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                        "px-4 py-2 font-mono text-xs font-bold uppercase tracking-terminal border-2 transition-colors",
                         selectedFeatures.includes(col)
-                          ? "bg-slate-700 text-slate-500 cursor-not-allowed"
+                          ? "bg-terminal-grid text-terminal-black/50 border-terminal-grid cursor-not-allowed"
                           : col === targetColumn
-                          ? "bg-green-500 text-white"
-                          : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                          ? "bg-terminal-accent text-white border-terminal-accent"
+                          : "bg-terminal-panel text-terminal-black border-terminal-black hover:bg-terminal-accent hover:text-white hover:border-terminal-accent"
                       )}
                     >
                       {col}
-                      {col === targetColumn && (
-                        <CheckCircle className="inline w-4 h-4 ml-1" />
-                      )}
+                      {col === targetColumn && <CheckCircle className="inline w-3 h-3 ml-1" />}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Test Size */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-3">
-                  Test Set Size: {Math.round(testSize * 100)}%
+                <label className="block font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black mb-3">
+                  TEST SET SIZE: {Math.round(testSize * 100)}%
                 </label>
                 <input
                   type="range"
@@ -425,39 +379,34 @@ export default function LogisticTryItTab() {
                   max="50"
                   value={testSize * 100}
                   onChange={(e) => setTestSize(Number(e.target.value) / 100)}
-                  className="w-full max-w-xs accent-purple-500"
+                  className="w-full max-w-xs"
                 />
-                <p className="text-sm text-slate-500 mt-1">
-                  {Math.round((1 - testSize) * 100)}% for training, {Math.round(testSize * 100)}% for testing
+                <p className="font-mono text-xs text-terminal-black/50 mt-1">
+                  TRAIN: {Math.round((1 - testSize) * 100)}% // TEST: {Math.round(testSize * 100)}%
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-4">
             <button
               onClick={resetAll}
-              className="px-6 py-3 rounded-xl font-medium border border-slate-600 text-slate-300 hover:bg-slate-800"
+              className="px-6 py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint transition-colors"
             >
-              Start Over
+              RESET
             </button>
             <button
               onClick={handleTrain}
               disabled={loading || selectedFeatures.length === 0 || !targetColumn}
               className={clsx(
-                "flex-1 py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2",
+                "flex-1 py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 transition-colors flex items-center justify-center gap-2",
                 selectedFeatures.length > 0 && targetColumn
-                  ? "bg-purple-500 text-white hover:bg-purple-600"
-                  : "bg-slate-700 text-slate-500 cursor-not-allowed"
+                  ? "bg-terminal-black text-terminal-mint border-terminal-black hover:bg-terminal-accent hover:border-terminal-accent"
+                  : "bg-terminal-grid text-terminal-black/50 border-terminal-grid cursor-not-allowed"
               )}
             >
-              {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Play className="w-5 h-5" />
-              )}
-              Train Model
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
+              EXECUTE TRAINING
             </button>
           </div>
         </div>
@@ -466,31 +415,29 @@ export default function LogisticTryItTab() {
       {/* Step 3: Results */}
       {step === "results" && trainResult && (
         <div className="space-y-6">
-          {/* Success Banner */}
-          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 flex items-center gap-3">
-            <CheckCircle className="w-6 h-6 text-green-400" />
+          <div className="bg-terminal-accent/10 border-2 border-terminal-accent p-4 flex items-center gap-3">
+            <CheckCircle className="w-6 h-6 text-terminal-accent" />
             <div>
-              <p className="text-green-400 font-medium">Model trained successfully!</p>
-              <p className="text-green-300 text-sm">{trainResult.message}</p>
+              <p className="font-mono text-xs font-bold text-terminal-accent">TRAINING COMPLETE</p>
+              <p className="font-mono text-xs text-terminal-accent">{trainResult.message}</p>
             </div>
           </div>
 
-          {/* Result Tabs */}
-          <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl border border-slate-700/50 overflow-hidden">
-            <div className="border-b border-slate-700/50 flex">
+          <div className="bg-terminal-panel border-2 border-terminal-black overflow-hidden">
+            <div className="border-b-2 border-terminal-black flex">
               {[
-                { id: "metrics", label: "Metrics", icon: BarChart3 },
-                { id: "predictions", label: "Predictions", icon: Table },
-                { id: "code", label: "Generated Code", icon: Code },
+                { id: "metrics", label: "METRICS", icon: BarChart3 },
+                { id: "predictions", label: "PREDICTIONS", icon: Table },
+                { id: "code", label: "CODE", icon: Code },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveResultTab(tab.id as typeof activeResultTab)}
                   className={clsx(
-                    "flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors",
+                    "flex items-center gap-2 px-6 py-4 font-mono text-xs font-bold uppercase tracking-terminal border-b-3 transition-colors",
                     activeResultTab === tab.id
-                      ? "border-purple-500 text-purple-400 bg-purple-500/10"
-                      : "border-transparent text-slate-400 hover:text-white hover:bg-slate-700/50"
+                      ? "border-terminal-black text-terminal-black bg-terminal-panel"
+                      : "border-transparent text-terminal-black/50 hover:text-terminal-black hover:bg-terminal-grid/50"
                   )}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -502,126 +449,121 @@ export default function LogisticTryItTab() {
             <div className="p-6">
               {activeResultTab === "metrics" && (
                 <div className="space-y-6">
-                  {/* Main Metrics */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-slate-900/50 rounded-lg p-4 text-center">
-                      <div className="text-2xl font-bold text-purple-400">
+                    <div className="bg-terminal-black p-4 text-center">
+                      <div className="text-2xl font-mono font-bold text-terminal-mint">
                         {(trainResult.metrics.accuracy * 100).toFixed(1)}%
                       </div>
-                      <div className="text-sm text-slate-400">Accuracy</div>
+                      <div className="font-mono text-xs text-terminal-grid">ACCURACY</div>
                     </div>
-                    <div className="bg-slate-900/50 rounded-lg p-4 text-center">
-                      <div className="text-2xl font-bold text-blue-400">
+                    <div className="bg-terminal-black p-4 text-center">
+                      <div className="text-2xl font-mono font-bold text-terminal-mint">
                         {(trainResult.metrics.precision * 100).toFixed(1)}%
                       </div>
-                      <div className="text-sm text-slate-400">Precision</div>
+                      <div className="font-mono text-xs text-terminal-grid">PRECISION</div>
                     </div>
-                    <div className="bg-slate-900/50 rounded-lg p-4 text-center">
-                      <div className="text-2xl font-bold text-green-400">
+                    <div className="bg-terminal-black p-4 text-center">
+                      <div className="text-2xl font-mono font-bold text-terminal-mint">
                         {(trainResult.metrics.recall * 100).toFixed(1)}%
                       </div>
-                      <div className="text-sm text-slate-400">Recall</div>
+                      <div className="font-mono text-xs text-terminal-grid">RECALL</div>
                     </div>
-                    <div className="bg-slate-900/50 rounded-lg p-4 text-center">
-                      <div className="text-2xl font-bold text-amber-400">
+                    <div className="bg-terminal-black p-4 text-center">
+                      <div className="text-2xl font-mono font-bold text-terminal-warning">
                         {(trainResult.metrics.f1_score * 100).toFixed(1)}%
                       </div>
-                      <div className="text-sm text-slate-400">F1 Score</div>
+                      <div className="font-mono text-xs text-terminal-grid">F1 SCORE</div>
                     </div>
                   </div>
 
-                  {/* Confusion Matrix */}
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-4">Confusion Matrix</h4>
+                    <h4 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black mb-4">
+                      CONFUSION MATRIX
+                    </h4>
                     <div className="grid grid-cols-2 gap-2 max-w-xs">
-                      <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4 text-center">
-                        <div className="text-xl font-bold text-green-400">
+                      <div className="bg-terminal-accent/20 border-2 border-terminal-accent p-4 text-center">
+                        <div className="text-xl font-mono font-bold text-terminal-accent">
                           {trainResult.metrics.confusion_matrix.true_negative}
                         </div>
-                        <div className="text-xs text-slate-400">True Negative</div>
+                        <div className="font-mono text-xs text-terminal-black/50">TRUE_NEG</div>
                       </div>
-                      <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-center">
-                        <div className="text-xl font-bold text-red-400">
+                      <div className="bg-red-500/20 border-2 border-red-500 p-4 text-center">
+                        <div className="text-xl font-mono font-bold text-red-500">
                           {trainResult.metrics.confusion_matrix.false_positive}
                         </div>
-                        <div className="text-xs text-slate-400">False Positive</div>
+                        <div className="font-mono text-xs text-terminal-black/50">FALSE_POS</div>
                       </div>
-                      <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-center">
-                        <div className="text-xl font-bold text-red-400">
+                      <div className="bg-red-500/20 border-2 border-red-500 p-4 text-center">
+                        <div className="text-xl font-mono font-bold text-red-500">
                           {trainResult.metrics.confusion_matrix.false_negative}
                         </div>
-                        <div className="text-xs text-slate-400">False Negative</div>
+                        <div className="font-mono text-xs text-terminal-black/50">FALSE_NEG</div>
                       </div>
-                      <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4 text-center">
-                        <div className="text-xl font-bold text-green-400">
+                      <div className="bg-terminal-accent/20 border-2 border-terminal-accent p-4 text-center">
+                        <div className="text-xl font-mono font-bold text-terminal-accent">
                           {trainResult.metrics.confusion_matrix.true_positive}
                         </div>
-                        <div className="text-xs text-slate-400">True Positive</div>
+                        <div className="font-mono text-xs text-terminal-black/50">TRUE_POS</div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Coefficients */}
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-4">Coefficients</h4>
+                    <h4 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black mb-4">
+                      COEFFICIENTS
+                    </h4>
                     <div className="space-y-2">
                       {Object.entries(trainResult.coefficients).map(([feature, coef]) => (
-                        <div key={feature} className="flex items-center justify-between">
-                          <span className="text-slate-300">{feature}</span>
-                          <span className={clsx(
-                            "font-mono",
-                            coef > 0 ? "text-green-400" : "text-red-400"
-                          )}>
+                        <div key={feature} className="flex items-center justify-between font-mono text-xs">
+                          <span className="text-terminal-black">{feature}</span>
+                          <span className={clsx("font-bold", coef > 0 ? "text-terminal-accent" : "text-red-500")}>
                             {coef > 0 ? "+" : ""}{coef.toFixed(4)}
                           </span>
                         </div>
                       ))}
-                      <div className="flex items-center justify-between pt-2 border-t border-slate-700">
-                        <span className="text-slate-300">Intercept</span>
-                        <span className="font-mono text-amber-400">
-                          {trainResult.intercept.toFixed(4)}
-                        </span>
+                      <div className="flex items-center justify-between pt-2 border-t-2 border-terminal-black font-mono text-xs">
+                        <span className="text-terminal-black">INTERCEPT</span>
+                        <span className="font-bold text-terminal-warning">{trainResult.intercept.toFixed(4)}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Sample Info */}
-                  <div className="flex gap-4 text-sm text-slate-400">
-                    <span>Train samples: {trainResult.metrics.train_samples}</span>
-                    <span>Test samples: {trainResult.metrics.test_samples}</span>
+                  <div className="flex gap-4 font-mono text-xs text-terminal-black/50">
+                    <span>TRAIN_SAMPLES: {trainResult.metrics.train_samples}</span>
+                    <span>TEST_SAMPLES: {trainResult.metrics.test_samples}</span>
                   </div>
                 </div>
               )}
 
               {activeResultTab === "predictions" && (
                 <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-white">Test Predictions</h4>
+                  <h4 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black">
+                    TEST PREDICTIONS
+                  </h4>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead className="bg-slate-900/50">
+                    <table className="w-full">
+                      <thead>
                         <tr>
-                          <th className="px-4 py-2 text-left text-slate-300">Actual</th>
-                          <th className="px-4 py-2 text-left text-slate-300">Predicted</th>
-                          <th className="px-4 py-2 text-left text-slate-300">Probability</th>
-                          <th className="px-4 py-2 text-left text-slate-300">Result</th>
+                          <th className="px-4 py-2 text-left font-mono text-xs font-bold uppercase tracking-terminal">ACTUAL</th>
+                          <th className="px-4 py-2 text-left font-mono text-xs font-bold uppercase tracking-terminal">PREDICTED</th>
+                          <th className="px-4 py-2 text-left font-mono text-xs font-bold uppercase tracking-terminal">PROBABILITY</th>
+                          <th className="px-4 py-2 text-left font-mono text-xs font-bold uppercase tracking-terminal">STATUS</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-700/50">
+                      <tbody>
                         {trainResult.predictions.slice(0, 10).map((pred, idx) => (
                           <tr key={idx}>
-                            <td className="px-4 py-2 text-slate-400">{pred.actual}</td>
-                            <td className="px-4 py-2 text-slate-400">{pred.predicted}</td>
-                            <td className="px-4 py-2 text-slate-400">
-                              {(pred.probability * 100).toFixed(1)}%
-                            </td>
-                            <td className="px-4 py-2">
+                            <td className="px-4 py-2 font-mono text-xs">{pred.actual}</td>
+                            <td className="px-4 py-2 font-mono text-xs">{pred.predicted}</td>
+                            <td className="px-4 py-2 font-mono text-xs">{(pred.probability * 100).toFixed(1)}%</td>
+                            <td className="px-4 py-2 font-mono text-xs">
                               {pred.actual === pred.predicted ? (
-                                <span className="text-green-400 flex items-center gap-1">
-                                  <CheckCircle className="w-4 h-4" /> Correct
+                                <span className="text-terminal-accent flex items-center gap-1">
+                                  <CheckCircle className="w-3 h-3" /> CORRECT
                                 </span>
                               ) : (
-                                <span className="text-red-400 flex items-center gap-1">
-                                  <X className="w-4 h-4" /> Wrong
+                                <span className="text-red-500 flex items-center gap-1">
+                                  <X className="w-3 h-3" /> WRONG
                                 </span>
                               )}
                             </td>
@@ -631,8 +573,8 @@ export default function LogisticTryItTab() {
                     </table>
                   </div>
                   {trainResult.predictions.length > 10 && (
-                    <p className="text-sm text-slate-500">
-                      Showing 10 of {trainResult.predictions.length} predictions
+                    <p className="font-mono text-xs text-terminal-black/50">
+                      SHOWING 10 OF {trainResult.predictions.length} PREDICTIONS
                     </p>
                   )}
                 </div>
@@ -641,12 +583,10 @@ export default function LogisticTryItTab() {
               {activeResultTab === "code" && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-white">
-                      Python Code
+                    <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black">
+                      PYTHON CODE
                     </h3>
-                    <span className="text-sm text-slate-500">
-                      Copy and run this in your own environment
-                    </span>
+                    <span className="font-mono text-xs text-terminal-black/50">COPY AND RUN IN YOUR ENVIRONMENT</span>
                   </div>
                   <CodeBlock code={trainResult.generated_code} language="python" />
                 </div>
@@ -654,19 +594,18 @@ export default function LogisticTryItTab() {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-4">
             <button
               onClick={resetAll}
-              className="px-6 py-3 rounded-xl font-medium border border-slate-600 text-slate-300 hover:bg-slate-800"
+              className="px-6 py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint transition-colors"
             >
-              Try Different Data
+              NEW DATA
             </button>
             <button
               onClick={() => setStep("configure")}
-              className="px-6 py-3 rounded-xl font-medium bg-purple-500 text-white hover:bg-purple-600"
+              className="px-6 py-3 font-mono text-xs font-bold uppercase tracking-terminal bg-terminal-black text-terminal-mint border-2 border-terminal-black hover:bg-terminal-accent hover:border-terminal-accent transition-colors"
             >
-              Adjust Configuration
+              RECONFIGURE
             </button>
           </div>
         </div>

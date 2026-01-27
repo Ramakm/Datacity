@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import {
   Upload,
   FileText,
@@ -45,7 +45,6 @@ export default function TryItTab() {
 
   // Data state
   const [uploadedData, setUploadedData] = useState<DataUploadResponse | null>(null);
-  const [rawData, setRawData] = useState<Record<string, unknown>[]>([]);
   const [csvText, setCsvText] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -61,7 +60,6 @@ export default function TryItTab() {
   const resetAll = () => {
     setStep("upload");
     setUploadedData(null);
-    setRawData([]);
     setCsvText("");
     setSelectedFeatures([]);
     setTargetColumn("");
@@ -79,7 +77,6 @@ export default function TryItTab() {
     try {
       const response = await apiClient.uploadCsv(file);
       setUploadedData(response);
-      setRawData(response.preview);
       setStep("configure");
 
       // Read full file for training
@@ -104,7 +101,6 @@ export default function TryItTab() {
     try {
       const response = await apiClient.parseCsvText(csvText);
       setUploadedData(response);
-      setRawData(response.preview);
       setStep("configure");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to parse CSV");
@@ -146,12 +142,7 @@ export default function TryItTab() {
     setError(null);
 
     try {
-      // Parse full CSV for training
-      const response = await apiClient.parseCsvText(csvText);
-      const fullData = response.preview;
-
-      // Actually we need to get all data, not just preview
-      // Let's re-parse and use it
+      // Parse CSV data for training
       const lines = csvText.trim().split("\n");
       const headers = lines[0].split(",").map((h) => h.trim());
       const data: Record<string, unknown>[] = [];
@@ -182,38 +173,43 @@ export default function TryItTab() {
     }
   };
 
+  const getStepIndex = (s: Step) => {
+    const steps: Step[] = ["upload", "configure", "results"];
+    return steps.indexOf(s);
+  };
+
   return (
     <div className="space-y-6">
       {/* Progress Steps */}
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-2">
         {[
-          { id: "upload", label: "Upload Data", icon: Upload },
-          { id: "configure", label: "Configure", icon: Table },
-          { id: "results", label: "Results", icon: BarChart3 },
+          { id: "upload" as Step, label: "01_UPLOAD", icon: Upload },
+          { id: "configure" as Step, label: "02_CONFIG", icon: Table },
+          { id: "results" as Step, label: "03_RESULTS", icon: BarChart3 },
         ].map((s, index) => (
           <div key={s.id} className="flex items-center gap-2">
             <div
               className={clsx(
-                "w-10 h-10 rounded-full flex items-center justify-center",
+                "w-10 h-10 border-2 flex items-center justify-center transition-colors",
                 step === s.id
-                  ? "bg-primary-500 text-white"
-                  : ["configure", "results"].indexOf(step) > ["upload", "configure", "results"].indexOf(s.id)
-                  ? "bg-primary-100 text-primary-600"
-                  : "bg-slate-200 text-slate-500"
+                  ? "bg-terminal-black border-terminal-black text-terminal-mint"
+                  : getStepIndex(step) > getStepIndex(s.id)
+                  ? "bg-terminal-accent border-terminal-accent text-terminal-mint"
+                  : "bg-terminal-panel border-terminal-grid text-terminal-grid"
               )}
             >
               <s.icon className="w-5 h-5" />
             </div>
             <span
               className={clsx(
-                "text-sm font-medium hidden sm:block",
-                step === s.id ? "text-primary-600" : "text-slate-500"
+                "font-mono text-xs uppercase tracking-terminal hidden sm:block",
+                step === s.id ? "text-terminal-black font-bold" : "text-terminal-black/50"
               )}
             >
               {s.label}
             </span>
             {index < 2 && (
-              <div className="w-8 h-px bg-slate-200 hidden sm:block" />
+              <div className="w-8 h-0.5 bg-terminal-grid hidden sm:block" />
             )}
           </div>
         ))}
@@ -221,11 +217,13 @@ export default function TryItTab() {
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+        <div className="bg-red-50 border-2 border-red-500 p-4 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-red-800 font-medium">Error</p>
-            <p className="text-red-700 text-sm">{error}</p>
+            <p className="font-mono text-xs font-bold uppercase tracking-terminal text-red-800">
+              ERROR
+            </p>
+            <p className="font-mono text-xs text-red-700">{error}</p>
           </div>
           <button
             onClick={() => setError(null)}
@@ -238,9 +236,9 @@ export default function TryItTab() {
 
       {/* Step 1: Upload */}
       {step === "upload" && (
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <h3 className="text-lg font-semibold text-slate-800 mb-6">
-            Load Your Data
+        <div className="bg-terminal-panel border-2 border-terminal-black p-6">
+          <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black mb-6">
+            {"//"} DATA INPUT
           </h3>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -248,14 +246,14 @@ export default function TryItTab() {
             <div className="space-y-4">
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary-400 hover:bg-primary-50 transition-colors"
+                className="border-2 border-dashed border-terminal-black p-8 text-center cursor-pointer hover:bg-terminal-black hover:border-terminal-black group transition-colors"
               >
-                <Upload className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                <p className="text-slate-700 font-medium mb-2">
-                  Click to upload a CSV file
+                <Upload className="w-12 h-12 text-terminal-black group-hover:text-terminal-mint mx-auto mb-4" />
+                <p className="font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black group-hover:text-terminal-mint mb-2">
+                  CLICK TO UPLOAD CSV
                 </p>
-                <p className="text-slate-500 text-sm">
-                  or drag and drop
+                <p className="font-mono text-xs text-terminal-black/50 group-hover:text-terminal-mint/70">
+                  OR DRAG AND DROP
                 </p>
                 <input
                   ref={fileInputRef}
@@ -270,28 +268,30 @@ export default function TryItTab() {
             {/* Paste CSV */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <p className="text-slate-700 font-medium">Or paste CSV data:</p>
+                <p className="font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black">
+                  OR PASTE CSV DATA:
+                </p>
                 <button
                   onClick={loadSampleData}
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="font-mono text-xs uppercase tracking-terminal text-terminal-accent hover:text-terminal-black font-bold"
                 >
-                  Load sample data
+                  [LOAD SAMPLE]
                 </button>
               </div>
               <textarea
                 value={csvText}
                 onChange={(e) => setCsvText(e.target.value)}
-                placeholder="Paste your CSV data here..."
-                className="w-full h-48 px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono text-sm resize-none"
+                placeholder="PASTE CSV DATA HERE..."
+                className="w-full h-48 px-4 py-3 border-2 border-terminal-black bg-terminal-bg font-mono text-xs resize-none focus:outline-none focus:bg-terminal-panel placeholder:text-terminal-grid"
               />
               <button
                 onClick={handlePasteCSV}
                 disabled={loading || !csvText.trim()}
                 className={clsx(
-                  "w-full py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2",
+                  "w-full py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 transition-colors flex items-center justify-center gap-2",
                   csvText.trim()
-                    ? "bg-primary-500 text-white hover:bg-primary-600"
-                    : "bg-slate-200 text-slate-500 cursor-not-allowed"
+                    ? "bg-terminal-black border-terminal-black text-terminal-mint hover:bg-terminal-accent hover:border-terminal-accent"
+                    : "bg-terminal-grid border-terminal-grid text-terminal-panel cursor-not-allowed"
                 )}
               >
                 {loading ? (
@@ -299,15 +299,15 @@ export default function TryItTab() {
                 ) : (
                   <FileText className="w-5 h-5" />
                 )}
-                Parse CSV
+                PARSE CSV
               </button>
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-            <p className="text-sm text-slate-600">
-              <strong>Tip:</strong> Your CSV should have numeric columns for regression.
-              The first row should contain column headers.
+          <div className="mt-6 p-4 bg-terminal-black text-terminal-mint">
+            <p className="font-mono text-xs">
+              <span className="text-terminal-accent font-bold">TIP:</span> CSV SHOULD HAVE NUMERIC COLUMNS FOR REGRESSION.
+              FIRST ROW = COLUMN HEADERS.
             </p>
           </div>
         </div>
@@ -317,36 +317,36 @@ export default function TryItTab() {
       {step === "configure" && uploadedData && (
         <div className="space-y-6">
           {/* Data Preview */}
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <div className="bg-terminal-panel border-2 border-terminal-black p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-slate-800">
-                Data Preview
+              <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black">
+                {"//"} DATA PREVIEW
               </h3>
-              <span className="text-sm text-slate-500">
-                {uploadedData.row_count} rows, {uploadedData.columns.length} columns
+              <span className="font-mono text-xs text-terminal-black/50">
+                {uploadedData.row_count} ROWS // {uploadedData.columns.length} COLS
               </span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-slate-50">
+            <div className="overflow-x-auto border-2 border-terminal-black">
+              <table className="w-full font-mono text-xs">
+                <thead className="bg-terminal-black text-terminal-mint">
                   <tr>
                     {uploadedData.columns.map((col) => (
                       <th
                         key={col}
-                        className="px-4 py-2 text-left text-slate-700 font-semibold whitespace-nowrap"
+                        className="px-4 py-2 text-left font-bold uppercase tracking-terminal whitespace-nowrap"
                       >
                         {col}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-terminal-grid">
                   {uploadedData.preview.slice(0, 5).map((row, idx) => (
-                    <tr key={idx}>
+                    <tr key={idx} className="hover:bg-terminal-accent/10">
                       {uploadedData.columns.map((col) => (
                         <td
                           key={col}
-                          className="px-4 py-2 text-slate-600 whitespace-nowrap"
+                          className="px-4 py-2 text-terminal-black whitespace-nowrap"
                         >
                           {String(row[col] ?? "")}
                         </td>
@@ -359,16 +359,16 @@ export default function TryItTab() {
           </div>
 
           {/* Column Selection */}
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
-            <h3 className="text-lg font-semibold text-slate-800 mb-4">
-              Configure Model
+          <div className="bg-terminal-panel border-2 border-terminal-black p-6">
+            <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black mb-6">
+              {"//"} MODEL CONFIGURATION
             </h3>
 
             <div className="space-y-6">
               {/* Feature Selection */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-3">
-                  Select Feature Columns (inputs)
+                <label className="block font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black mb-3">
+                  SELECT FEATURE COLUMNS (INPUTS)
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {uploadedData.numeric_columns.map((col) => (
@@ -377,12 +377,12 @@ export default function TryItTab() {
                       onClick={() => toggleFeature(col)}
                       disabled={col === targetColumn}
                       className={clsx(
-                        "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                        "px-4 py-2 border-2 font-mono text-xs font-bold uppercase tracking-terminal transition-colors",
                         col === targetColumn
-                          ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                          ? "border-terminal-grid bg-terminal-grid/30 text-terminal-grid cursor-not-allowed"
                           : selectedFeatures.includes(col)
-                          ? "bg-primary-500 text-white"
-                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          ? "border-terminal-accent bg-terminal-accent text-terminal-mint"
+                          : "border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint"
                       )}
                     >
                       {col}
@@ -392,15 +392,15 @@ export default function TryItTab() {
                     </button>
                   ))}
                 </div>
-                <p className="text-sm text-slate-500 mt-2">
-                  Selected: {selectedFeatures.length} feature(s)
+                <p className="font-mono text-xs text-terminal-black/50 mt-2">
+                  SELECTED: {selectedFeatures.length} FEATURE(S)
                 </p>
               </div>
 
               {/* Target Selection */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-3">
-                  Select Target Column (what to predict)
+                <label className="block font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black mb-3">
+                  SELECT TARGET COLUMN (OUTPUT TO PREDICT)
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {uploadedData.numeric_columns.map((col) => (
@@ -409,12 +409,12 @@ export default function TryItTab() {
                       onClick={() => setTarget(col)}
                       disabled={selectedFeatures.includes(col)}
                       className={clsx(
-                        "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                        "px-4 py-2 border-2 font-mono text-xs font-bold uppercase tracking-terminal transition-colors",
                         selectedFeatures.includes(col)
-                          ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                          ? "border-terminal-grid bg-terminal-grid/30 text-terminal-grid cursor-not-allowed"
                           : col === targetColumn
-                          ? "bg-green-500 text-white"
-                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          ? "border-terminal-warning bg-terminal-warning text-terminal-black"
+                          : "border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint"
                       )}
                     >
                       {col}
@@ -428,8 +428,8 @@ export default function TryItTab() {
 
               {/* Test Size */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-3">
-                  Test Set Size: {Math.round(testSize * 100)}%
+                <label className="block font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black mb-3">
+                  TEST SET SIZE: {Math.round(testSize * 100)}%
                 </label>
                 <input
                   type="range"
@@ -437,10 +437,10 @@ export default function TryItTab() {
                   max="50"
                   value={testSize * 100}
                   onChange={(e) => setTestSize(Number(e.target.value) / 100)}
-                  className="w-full max-w-xs"
+                  className="w-full max-w-xs accent-terminal-accent"
                 />
-                <p className="text-sm text-slate-500 mt-1">
-                  {Math.round((1 - testSize) * 100)}% for training, {Math.round(testSize * 100)}% for testing
+                <p className="font-mono text-xs text-terminal-black/50 mt-1">
+                  TRAIN: {Math.round((1 - testSize) * 100)}% // TEST: {Math.round(testSize * 100)}%
                 </p>
               </div>
             </div>
@@ -450,18 +450,18 @@ export default function TryItTab() {
           <div className="flex items-center gap-4">
             <button
               onClick={resetAll}
-              className="px-6 py-3 rounded-xl font-medium border border-slate-300 text-slate-700 hover:bg-slate-50"
+              className="px-6 py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint transition-colors"
             >
-              Start Over
+              RESTART
             </button>
             <button
               onClick={handleTrain}
               disabled={loading || selectedFeatures.length === 0 || !targetColumn}
               className={clsx(
-                "flex-1 py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2",
+                "flex-1 py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 transition-colors flex items-center justify-center gap-2",
                 selectedFeatures.length > 0 && targetColumn
-                  ? "bg-primary-500 text-white hover:bg-primary-600"
-                  : "bg-slate-200 text-slate-500 cursor-not-allowed"
+                  ? "bg-terminal-black border-terminal-black text-terminal-mint hover:bg-terminal-accent hover:border-terminal-accent"
+                  : "bg-terminal-grid border-terminal-grid text-terminal-panel cursor-not-allowed"
               )}
             >
               {loading ? (
@@ -469,7 +469,7 @@ export default function TryItTab() {
               ) : (
                 <Play className="w-5 h-5" />
               )}
-              Train Model
+              EXECUTE TRAINING
             </button>
           </div>
         </div>
@@ -479,30 +479,32 @@ export default function TryItTab() {
       {step === "results" && trainResult && (
         <div className="space-y-6">
           {/* Success Banner */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
-            <CheckCircle className="w-6 h-6 text-green-500" />
+          <div className="bg-terminal-accent/20 border-2 border-terminal-accent p-4 flex items-center gap-3">
+            <CheckCircle className="w-6 h-6 text-terminal-accent" />
             <div>
-              <p className="text-green-800 font-medium">Model trained successfully!</p>
-              <p className="text-green-700 text-sm">{trainResult.message}</p>
+              <p className="font-mono text-xs font-bold uppercase tracking-terminal text-terminal-black">
+                MODEL TRAINED SUCCESSFULLY
+              </p>
+              <p className="font-mono text-xs text-terminal-black/70">{trainResult.message}</p>
             </div>
           </div>
 
           {/* Result Tabs */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-            <div className="border-b border-slate-200 flex">
+          <div className="bg-terminal-panel border-2 border-terminal-black overflow-hidden">
+            <div className="border-b-2 border-terminal-black flex">
               {[
-                { id: "metrics", label: "Metrics & Coefficients", icon: BarChart3 },
-                { id: "predictions", label: "Predictions Chart", icon: Table },
-                { id: "code", label: "Generated Code", icon: Code },
+                { id: "metrics", label: "METRICS", icon: BarChart3 },
+                { id: "predictions", label: "PREDICTIONS", icon: Table },
+                { id: "code", label: "CODE", icon: Code },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveResultTab(tab.id as typeof activeResultTab)}
                   className={clsx(
-                    "flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors",
+                    "flex items-center gap-2 px-6 py-4 font-mono text-xs font-bold uppercase tracking-terminal border-b-2 transition-colors",
                     activeResultTab === tab.id
-                      ? "border-primary-500 text-primary-600 bg-primary-50"
-                      : "border-transparent text-slate-600 hover:text-slate-800 hover:bg-slate-50"
+                      ? "border-terminal-black text-terminal-black bg-terminal-bg"
+                      : "border-transparent text-terminal-black/50 hover:text-terminal-black hover:bg-terminal-panel/50"
                   )}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -527,11 +529,11 @@ export default function TryItTab() {
               {activeResultTab === "code" && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-slate-800">
-                      Python Code
+                    <h3 className="font-mono text-sm font-bold uppercase tracking-terminal text-terminal-black">
+                      {"//"} GENERATED PYTHON CODE
                     </h3>
-                    <span className="text-sm text-slate-500">
-                      Copy and run this in your own environment
+                    <span className="font-mono text-xs text-terminal-black/50">
+                      COPY AND EXECUTE IN YOUR ENVIRONMENT
                     </span>
                   </div>
                   <CodeBlock code={trainResult.generated_code} language="python" />
@@ -544,15 +546,15 @@ export default function TryItTab() {
           <div className="flex items-center gap-4">
             <button
               onClick={resetAll}
-              className="px-6 py-3 rounded-xl font-medium border border-slate-300 text-slate-700 hover:bg-slate-50"
+              className="px-6 py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 border-terminal-black text-terminal-black hover:bg-terminal-black hover:text-terminal-mint transition-colors"
             >
-              Try Different Data
+              NEW DATA
             </button>
             <button
               onClick={() => setStep("configure")}
-              className="px-6 py-3 rounded-xl font-medium bg-primary-500 text-white hover:bg-primary-600"
+              className="px-6 py-3 font-mono text-xs font-bold uppercase tracking-terminal border-2 bg-terminal-black border-terminal-black text-terminal-mint hover:bg-terminal-accent hover:border-terminal-accent transition-colors"
             >
-              Adjust Configuration
+              RECONFIGURE
             </button>
           </div>
         </div>
