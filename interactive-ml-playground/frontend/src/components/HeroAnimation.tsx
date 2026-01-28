@@ -187,7 +187,7 @@ export default function HeroAnimation() {
           const px = fromP.x + (toP.x - fromP.x) * progress;
           const py = fromP.y + (toP.y - fromP.y) * progress;
 
-          ctx.fillStyle = "rgba(26, 92, 58, 0.6)";
+          ctx.fillStyle = "rgba(16, 17, 17, 0.6)";
           ctx.beginPath();
           ctx.arc(px, py, 2, 0, Math.PI * 2);
           ctx.fill();
@@ -248,7 +248,7 @@ export default function HeroAnimation() {
       });
 
       // Draw formulas
-      ctx.fillStyle = "rgba(10, 10, 10, 0.15)";
+      ctx.fillStyle = "rgba(251, 250, 241, 0.15)";
       ctx.font = "italic 12px monospace";
       ctx.fillText("y = f(Wx + b)", w * 0.5, 25);
       ctx.fillText("L = -log(p)", w * 0.2, h - 30);
