@@ -55,8 +55,14 @@ export default function RootLayout({
                   >
                     MODELS
                   </a>
+                  <Link
+                    href="/research-papers"
+                    className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
+                  >
+                    PAPERS
+                  </Link>
                   <a
-                    href="https://github.com"
+                    href="https://github.com/Ramakm"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
@@ -117,26 +123,36 @@ export default function RootLayout({
                       </Link>
                     </li>
                     <li>
-                      <span className="text-terminal-grid opacity-50">&gt; KNN [PENDING]</span>
+                      <Link href="/models/knn" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
+                        &gt; KNN
+                      </Link>
                     </li>
                     <li>
-                      <span className="text-terminal-grid opacity-50">&gt; K_MEANS [PENDING]</span>
+                      <Link href="/models/kmeans" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
+                        &gt; K_MEANS
+                      </Link>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-mono font-bold text-xs uppercase tracking-terminal mb-4 text-terminal-mint">Paper & Coding</h4>
-                  <ul className="space-y-2 text-xs font-mono text-terminal-grid">
-                    <li>Reasearch Paper</li>
-                    <li>Questions Practice</li>
+                  <h4 className="font-mono font-bold text-xs uppercase tracking-terminal mb-4 text-terminal-mint">RESOURCES</h4>
+                  <ul className="space-y-2 text-xs font-mono">
+                    <li>
+                      <Link href="/research-papers" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
+                        &gt; RESEARCH_PAPERS
+                      </Link>
+                    </li>
+                    <li>
+                      <span className="text-terminal-grid opacity-50">&gt; PRACTICE [COMING SOON]</span>
+                    </li>
                   </ul>
                 </div>
               </div>
 
               <div className="pt-6 border-t border-terminal-grid/30 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <p className="text-xs font-mono text-terminal-grid">
-                  [2024] ML TERMINAL // OPEN SOURCE // UNRESTRICTED ACCESS
+                  [2026] ML TERMINAL // OPEN SOURCE // UNRESTRICTED ACCESS
                 </p>
                 <div className="flex items-center gap-3">
                   <span className="text-xs font-mono px-2 py-1 border border-terminal-accent text-terminal-accent uppercase tracking-wider">
