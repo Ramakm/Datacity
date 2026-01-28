@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "ML TERMINAL | MACHINE LEARNING RESEARCH INTERFACE",
@@ -21,73 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <div className="min-h-screen flex flex-col bg-terminal-bg grid-bg">
-          {/* Header */}
-          <header className="fixed top-0 left-0 right-0 z-50 bg-terminal-panel border-b-2 border-terminal-black">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between h-14">
-                <Link href="/" className="flex items-center gap-3 group">
-                  {/* Logo */}
-                  <div className="w-8 h-8 bg-terminal-black flex items-center justify-center">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      className="w-5 h-5 text-terminal-mint"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                      <path d="M2 17l10 5 10-5" />
-                      <path d="M2 12l10 5 10-5" />
-                    </svg>
-                  </div>
-                  <span className="font-mono font-bold text-terminal-black text-sm uppercase tracking-terminal hidden sm:block">
-                    ML TERMINAL
-                  </span>
-                </Link>
+        <AuthProvider>
+          <div className="min-h-screen flex flex-col bg-terminal-bg grid-bg">
+            {/* Header */}
+            <Header />
 
-                <nav className="flex items-center gap-4">
-                  <Link
-                    href="/#models"
-                    className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
-                  >
-                    MODELS
-                  </Link>
-                  <Link
-                    href="/research-papers"
-                    className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
-                  >
-                    PAPERS
-                  </Link>
-                  <Link
-                    href="/practice"
-                    className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
-                  >
-                    PRACTICE
-                  </Link>
-                  <a
-                    href="https://github.com/Ramakm"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
-                  >
-                    GITHUB
-                  </a>
-                  <Link
-                    href="/#models"
-                    className="btn-terminal"
-                  >
-                    ACCESS SYSTEM
-                  </Link>
-                </nav>
-              </div>
-            </div>
-          </header>
-
-          {/* Main content */}
-          <main className="flex-1 pt-14">{children}</main>
+            {/* Main content */}
+            <main className="flex-1 pt-14">{children}</main>
 
           {/* Footer */}
           <footer className="bg-terminal-black text-terminal-mint border-t-2 border-terminal-black">
@@ -176,7 +118,8 @@ export default function RootLayout({
               </div>
             </div>
           </footer>
-        </div>
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

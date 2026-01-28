@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import ml
+from app.routers import ml, auth
 
 app = FastAPI(
     title="Interactive ML Playground API",
@@ -21,6 +21,7 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(auth.router)
 app.include_router(ml.router)
 
 
@@ -40,5 +41,6 @@ async def health_check():
     return {
         "status": "healthy",
         "api_version": "1.0.0",
-        "available_models": ["linear-regression"],
+        "available_models": ["linear-regression", "logistic-regression", "knn", "kmeans"],
+        "auth_enabled": True,
     }
