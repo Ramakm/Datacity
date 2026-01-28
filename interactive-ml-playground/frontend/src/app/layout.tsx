@@ -49,17 +49,23 @@ export default function RootLayout({
                 </Link>
 
                 <nav className="flex items-center gap-4">
-                  <a
-                    href="#models"
+                  <Link
+                    href="/#models"
                     className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
                   >
                     MODELS
-                  </a>
+                  </Link>
                   <Link
                     href="/research-papers"
                     className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
                   >
                     PAPERS
+                  </Link>
+                  <Link
+                    href="/practice"
+                    className="text-xs font-mono font-bold uppercase tracking-terminal text-terminal-black hover:bg-terminal-black hover:text-terminal-mint px-3 py-2 border-2 border-transparent hover:border-terminal-black transition-all hidden sm:block"
+                  >
+                    PRACTICE
                   </Link>
                   <a
                     href="https://github.com/Ramakm"
@@ -69,12 +75,12 @@ export default function RootLayout({
                   >
                     GITHUB
                   </a>
-                  <a
-                    href="#models"
+                  <Link
+                    href="/#models"
                     className="btn-terminal"
                   >
                     ACCESS SYSTEM
-                  </a>
+                  </Link>
                 </nav>
               </div>
             </div>
@@ -144,7 +150,9 @@ export default function RootLayout({
                       </Link>
                     </li>
                     <li>
-                      <span className="text-terminal-grid opacity-50">&gt; PRACTICE [COMING SOON]</span>
+                      <Link href="/practice" className="text-terminal-grid hover:text-terminal-mint hover:underline transition-colors">
+                        &gt; PRACTICE
+                      </Link>
                     </li>
                   </ul>
                 </div>
