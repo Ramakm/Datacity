@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     APP_NAME: str = "ML Terminal"
     DEBUG: bool = True
 
+    # Database Settings
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/ml_terminal"
+    DATABASE_URL_SYNC: str = "postgresql://postgres:postgres@localhost:5432/ml_terminal"
+
     class Config:
         env_file = ".env"
         case_sensitive = True

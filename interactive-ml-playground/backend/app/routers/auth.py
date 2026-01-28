@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from typing import Dict
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from ..schemas.auth import (
     UserCreate,
     UserLogin,
-    UserResponse,
     Token,
     TokenRefresh,
     MessageResponse,
@@ -16,57 +16,54 @@ from ..core.security import (
     decode_token,
     get_current_user,
 )
+from ..core.database import get_db
+from ..db.models import User
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-# In-memory user storage (for demo purposes)
-# In production, use a proper database
-users_db: Dict[str, dict] = {}
-user_id_counter = 0
 
-
-def get_user_by_username(username: str) -> dict | None:
+async def get_user_by_username(db: AsyncSession, username: str) -> User | None:
     """Get user by username."""
-    return users_db.get(username)
+    result = await db.execute(select(User).where(User.username == username))
+    return result.scalar_one_or_none()
 
 
-def get_user_by_email(email: str) -> dict | None:
+async def get_user_by_email(db: AsyncSession, email: str) -> User | None:
     """Get user by email."""
-    for user in users_db.values():
-        if user["email"] == email:
-            return user
-    return None
+    result = await db.execute(select(User).where(User.email == email))
+    return result.scalar_one_or_none()
 
 
 @router.post("/register", response_model=MessageResponse, status_code=status.HTTP_201_CREATED)
-async def register(user_data: UserCreate):
+async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
     """Register a new user."""
-    global user_id_counter
-
     # Check if username already exists
-    if get_user_by_username(user_data.username):
+    existing_user = await get_user_by_username(db, user_data.username)
+    if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already registered",
         )
 
     # Check if email already exists
-    if get_user_by_email(user_data.email):
+    existing_email = await get_user_by_email(db, user_data.email)
+    if existing_email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered",
         )
 
     # Create new user
-    user_id_counter += 1
     hashed_password = get_password_hash(user_data.password)
+    new_user = User(
+        username=user_data.username,
+        email=user_data.email,
+        hashed_password=hashed_password,
+    )
 
-    users_db[user_data.username] = {
-        "id": user_id_counter,
-        "username": user_data.username,
-        "email": user_data.email,
-        "hashed_password": hashed_password,
-    }
+    db.add(new_user)
+    await db.commit()
+    await db.refresh(new_user)
 
     return MessageResponse(
         message=f"User {user_data.username} registered successfully",
@@ -75,9 +72,9 @@ async def register(user_data: UserCreate):
 
 
 @router.post("/login", response_model=Token)
-async def login(credentials: UserLogin):
+async def login(credentials: UserLogin, db: AsyncSession = Depends(get_db)):
     """Authenticate user and return tokens."""
-    user = get_user_by_username(credentials.username)
+    user = await get_user_by_username(db, credentials.username)
 
     if not user:
         raise HTTPException(
@@ -86,15 +83,22 @@ async def login(credentials: UserLogin):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not verify_password(credentials.password, user["hashed_password"]):
+    if not verify_password(credentials.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User account is disabled",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     # Create tokens
-    token_data = {"sub": user["username"], "email": user["email"]}
+    token_data = {"sub": user.username, "email": user.email}
     access_token = create_access_token(token_data)
     refresh_token = create_refresh_token(token_data)
 
@@ -105,7 +109,7 @@ async def login(credentials: UserLogin):
 
 
 @router.post("/refresh", response_model=Token)
-async def refresh_token(token_data: TokenRefresh):
+async def refresh_token(token_data: TokenRefresh, db: AsyncSession = Depends(get_db)):
     """Refresh access token using refresh token."""
     payload = decode_token(token_data.refresh_token)
 
@@ -117,7 +121,7 @@ async def refresh_token(token_data: TokenRefresh):
         )
 
     username = payload.get("sub")
-    user = get_user_by_username(username)
+    user = await get_user_by_username(db, username)
 
     if not user:
         raise HTTPException(
@@ -126,8 +130,15 @@ async def refresh_token(token_data: TokenRefresh):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User account is disabled",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     # Create new tokens
-    new_token_data = {"sub": user["username"], "email": user["email"]}
+    new_token_data = {"sub": user.username, "email": user.email}
     access_token = create_access_token(new_token_data)
     new_refresh_token = create_refresh_token(new_token_data)
 
@@ -138,9 +149,12 @@ async def refresh_token(token_data: TokenRefresh):
 
 
 @router.get("/me", response_model=dict)
-async def get_me(current_user: dict = Depends(get_current_user)):
+async def get_me(
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     """Get current authenticated user info."""
-    user = get_user_by_username(current_user["username"])
+    user = await get_user_by_username(db, current_user["username"])
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -148,9 +162,11 @@ async def get_me(current_user: dict = Depends(get_current_user)):
         )
 
     return {
-        "id": user["id"],
-        "username": user["username"],
-        "email": user["email"],
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "is_active": user.is_active,
+        "created_at": user.created_at.isoformat(),
     }
 
 

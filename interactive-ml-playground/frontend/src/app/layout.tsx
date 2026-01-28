@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "ML TERMINAL | MACHINE LEARNING RESEARCH INTERFACE",
   description: "Government-grade machine learning research terminal. Train models. Analyze data. Generate code.",
   keywords: ["machine learning", "AI", "research terminal", "sklearn", "python", "data science"],
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     title: "ML TERMINAL",
     description: "Machine Learning Research Interface",
