@@ -270,8 +270,8 @@ function SystemInfoSection() {
             <p className="opacity-70">---</p>
             <p className="opacity-70">VERSION: 1.0.0</p>
             <p className="opacity-70">STATUS: OPERATIONAL</p>
-            <p className="opacity-70">MODELS_AVAILABLE: 4</p>
-            <p className="opacity-70">MODELS_ACTIVE: 4</p>
+            <p className="opacity-70">MODELS_AVAILABLE: 6</p>
+            <p className="opacity-70">MODELS_ACTIVE: 6</p>
             <p className="opacity-70">---</p>
             <p className="mt-4"><span className="text-terminal-accent">$</span> echo $PRIVACY_POLICY</p>
             <p className="opacity-70">NO_TRACKING // NO_COOKIES // NO_DATA_RETENTION</p>
