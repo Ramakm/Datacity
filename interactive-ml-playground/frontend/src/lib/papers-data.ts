@@ -11,7 +11,7 @@ export interface Paper {
   year: number;
   authors: string;
   link: string;
-  category: "foundational" | "embeddings" | "rnn" | "transformer" | "llm";
+  category: "foundational" | "embeddings" | "rnn" | "transformer" | "llm" | "agents";
   description: string;
   hasBreakdown: boolean;
   components?: PaperComponent[];
@@ -844,6 +844,139 @@ for batch in dataloader:
     description: "The imitation game and foundations of AI philosophy.",
     hasBreakdown: false,
   },
+  // AI Agents Papers
+  {
+    id: "ai-agents-review-2024",
+    title: "A Comprehensive Review of AI Agents",
+    shortTitle: "AI Agents Review",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2401.03428",
+    category: "agents",
+    description: "Comprehensive survey of AI agent architectures, capabilities, and applications.",
+    hasBreakdown: false,
+  },
+  {
+    id: "foundation-agents-2024",
+    title: "Advances and Challenges in Foundation Agents",
+    shortTitle: "Foundation Agents",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2404.11584",
+    category: "agents",
+    description: "Exploring the intersection of foundation models and autonomous agents.",
+    hasBreakdown: false,
+  },
+  {
+    id: "titans-2024",
+    title: "Titans: Learning to Memorize at Test Time",
+    shortTitle: "Titans",
+    year: 2024,
+    authors: "Google Research",
+    link: "https://arxiv.org/abs/2501.00663",
+    category: "agents",
+    description: "Novel architecture for test-time memorization and adaptation in neural networks.",
+    hasBreakdown: false,
+  },
+  {
+    id: "deepseek-r1-2025",
+    title: "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning",
+    shortTitle: "DeepSeek-R1",
+    year: 2025,
+    authors: "DeepSeek AI",
+    link: "https://arxiv.org/abs/2501.12948",
+    category: "agents",
+    description: "Advanced reasoning capabilities through reinforcement learning techniques.",
+    hasBreakdown: false,
+  },
+  {
+    id: "scaling-rl-2024",
+    title: "The Art of Scaling RL Compute for LLMs",
+    shortTitle: "Scaling RL",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2407.21787",
+    category: "agents",
+    description: "Techniques and strategies for scaling reinforcement learning in large language models.",
+    hasBreakdown: false,
+  },
+  {
+    id: "agentic-ai-adaptation-2024",
+    title: "Adaptation of Agentic AI",
+    shortTitle: "Agentic Adaptation",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2407.16066",
+    category: "agents",
+    description: "Methods for adapting AI agents to new tasks and environments.",
+    hasBreakdown: false,
+  },
+  {
+    id: "agent-lightning-2024",
+    title: "Agent Lightning: Fast and Efficient Agentic Inference",
+    shortTitle: "Agent Lightning",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2410.12587",
+    category: "agents",
+    description: "Optimizing inference speed and efficiency for AI agent systems.",
+    hasBreakdown: false,
+  },
+  {
+    id: "slms-agentic-2024",
+    title: "SLMs Are the Future for Agentic AI",
+    shortTitle: "SLMs for Agents",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2411.13273",
+    category: "agents",
+    description: "Small language models as efficient alternatives for agentic AI applications.",
+    hasBreakdown: false,
+  },
+  {
+    id: "scaling-agents-2024",
+    title: "Towards a Science of Scaling Agent Systems",
+    shortTitle: "Scaling Agents",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2410.15889",
+    category: "agents",
+    description: "Scientific foundations for scaling multi-agent systems effectively.",
+    hasBreakdown: false,
+  },
+  {
+    id: "are-2024",
+    title: "ARE: Agent Research Environment for Evaluating AI Agents",
+    shortTitle: "ARE",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2412.06826",
+    category: "agents",
+    description: "Standardized environment and benchmarks for evaluating AI agent performance.",
+    hasBreakdown: false,
+  },
+  {
+    id: "alphaevolve-2025",
+    title: "AlphaEvolve: A Coding Agent for Scientific and Algorithmic Discovery",
+    shortTitle: "AlphaEvolve",
+    year: 2025,
+    authors: "Google DeepMind",
+    link: "https://arxiv.org/abs/2501.14249",
+    category: "agents",
+    description: "AI agent designed for autonomous scientific discovery and algorithm development.",
+    hasBreakdown: false,
+  },
+  {
+    id: "self-evolving-agents-2024",
+    title: "Self-Evolving AI Agents: Autonomous Learning and Adaptation",
+    shortTitle: "Self-Evolving Agents",
+    year: 2024,
+    authors: "Various Authors",
+    link: "https://arxiv.org/abs/2411.02817",
+    category: "agents",
+    description: "Frameworks for AI agents that can autonomously improve and adapt over time.",
+    hasBreakdown: false,
+  },
 ];
 
 export const categoryLabels: Record<string, string> = {
@@ -852,6 +985,7 @@ export const categoryLabels: Record<string, string> = {
   rnn: "RNN / LSTM",
   transformer: "TRANSFORMER",
   llm: "LARGE LANGUAGE MODELS",
+  agents: "AI AGENTS",
 };
 
 export const categoryColors: Record<string, string> = {
@@ -860,6 +994,7 @@ export const categoryColors: Record<string, string> = {
   rnn: "border-purple-500 text-purple-500",
   transformer: "border-terminal-warning text-terminal-warning",
   llm: "border-red-500 text-red-500",
+  agents: "border-cyan-500 text-cyan-500",
 };
 
 export function getPaperById(id: string): Paper | undefined {

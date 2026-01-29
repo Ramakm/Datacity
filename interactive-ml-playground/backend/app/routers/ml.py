@@ -23,11 +23,19 @@ from app.schemas.schemas import (
     KMeansPredictRequest,
     KMeansPredictResponse,
     ClusterAssignment,
+    DecisionTreeTrainRequest,
+    DecisionTreeTrainResponse,
+    DecisionTreePredictionPoint,
+    RandomForestTrainRequest,
+    RandomForestTrainResponse,
+    RandomForestPredictionPoint,
 )
 from app.models.linear_regression import LinearRegressionTrainer
 from app.models.logistic_regression import LogisticRegressionTrainer
 from app.models.knn import KNNTrainer
 from app.models.kmeans import KMeansTrainer
+from app.models.decision_tree import DecisionTreeTrainer
+from app.models.random_forest import RandomForestTrainer
 
 router = APIRouter(prefix="/api/ml", tags=["Machine Learning"])
 
@@ -398,6 +406,101 @@ async def predict_kmeans(request: KMeansPredictRequest) -> KMeansPredictResponse
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
 
 
+# Decision Tree Endpoints
+@router.post("/train/decision-tree", response_model=DecisionTreeTrainResponse)
+async def train_decision_tree(request: DecisionTreeTrainRequest) -> DecisionTreeTrainResponse:
+    """
+    Train a Decision Tree model on the provided data.
+
+    Returns model metrics, feature importances, predictions, and generated Python code.
+    """
+    try:
+        trainer = DecisionTreeTrainer()
+        result = trainer.train(
+            data=request.data,
+            feature_columns=request.feature_columns,
+            target_column=request.target_column,
+            max_depth=request.max_depth,
+            min_samples_split=request.min_samples_split,
+            test_size=request.test_size,
+        )
+
+        predictions = [
+            DecisionTreePredictionPoint(
+                actual=p["actual"],
+                actual_label=p["actual_label"],
+                predicted=p["predicted"],
+                predicted_label=p["predicted_label"],
+                probabilities=p["probabilities"],
+                features=p["features"],
+            )
+            for p in result["predictions"]
+        ]
+
+        return DecisionTreeTrainResponse(
+            success=True,
+            message="Model trained successfully",
+            metrics=result["metrics"],
+            tree_params=result["tree_params"],
+            class_labels=result["class_labels"],
+            predictions=predictions,
+            generated_code=result["generated_code"],
+        )
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Training failed: {str(e)}")
+
+
+# Random Forest Endpoints
+@router.post("/train/random-forest", response_model=RandomForestTrainResponse)
+async def train_random_forest(request: RandomForestTrainRequest) -> RandomForestTrainResponse:
+    """
+    Train a Random Forest model on the provided data.
+
+    Returns model metrics, feature importances, predictions, and generated Python code.
+    """
+    try:
+        trainer = RandomForestTrainer()
+        result = trainer.train(
+            data=request.data,
+            feature_columns=request.feature_columns,
+            target_column=request.target_column,
+            n_estimators=request.n_estimators,
+            max_depth=request.max_depth,
+            min_samples_split=request.min_samples_split,
+            test_size=request.test_size,
+        )
+
+        predictions = [
+            RandomForestPredictionPoint(
+                actual=p["actual"],
+                actual_label=p["actual_label"],
+                predicted=p["predicted"],
+                predicted_label=p["predicted_label"],
+                probabilities=p["probabilities"],
+                features=p["features"],
+            )
+            for p in result["predictions"]
+        ]
+
+        return RandomForestTrainResponse(
+            success=True,
+            message="Model trained successfully",
+            metrics=result["metrics"],
+            forest_params=result["forest_params"],
+            class_labels=result["class_labels"],
+            predictions=predictions,
+            generated_code=result["generated_code"],
+        )
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Training failed: {str(e)}")
+
+
 @router.get("/models")
 async def list_models():
     """List available ML models."""
@@ -434,6 +537,22 @@ async def list_models():
                 "category": "Clustering",
                 "difficulty": "Beginner",
                 "tags": ["unsupervised", "clustering", "centroid-based"],
+            },
+            {
+                "id": "decision-tree",
+                "name": "Decision Tree",
+                "description": "A tree-based algorithm that makes predictions by learning decision rules from features.",
+                "category": "Classification",
+                "difficulty": "Beginner",
+                "tags": ["supervised", "classification", "interpretable", "tree-based"],
+            },
+            {
+                "id": "random-forest",
+                "name": "Random Forest",
+                "description": "An ensemble of decision trees that improves accuracy through voting.",
+                "category": "Classification",
+                "difficulty": "Intermediate",
+                "tags": ["supervised", "classification", "ensemble", "tree-based"],
             },
         ]
     }

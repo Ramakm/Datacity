@@ -106,6 +106,83 @@ export interface KNNTrainResponse {
   generated_code: string;
 }
 
+// Decision Tree types
+export interface DecisionTreePredictionPoint {
+  actual: number;
+  actual_label: string;
+  predicted: number;
+  predicted_label: string;
+  probabilities: Record<string, number>;
+  features: Record<string, number>;
+}
+
+export interface DecisionTreeTrainResponse {
+  success: boolean;
+  message: string;
+  metrics: {
+    accuracy: number;
+    precision: number;
+    recall: number;
+    f1_score: number;
+    max_depth: number;
+    actual_depth: number;
+    n_leaves: number;
+    n_classes: number;
+    feature_importances: Record<string, number>;
+    confusion_matrix: number[][];
+    train_samples: number;
+    test_samples: number;
+  };
+  tree_params: {
+    max_depth: number | null;
+    min_samples_split: number;
+    feature_columns: string[];
+    class_labels: Record<string, string>;
+  };
+  class_labels: Record<string, string>;
+  predictions: DecisionTreePredictionPoint[];
+  generated_code: string;
+}
+
+// Random Forest types
+export interface RandomForestPredictionPoint {
+  actual: number;
+  actual_label: string;
+  predicted: number;
+  predicted_label: string;
+  probabilities: Record<string, number>;
+  features: Record<string, number>;
+}
+
+export interface RandomForestTrainResponse {
+  success: boolean;
+  message: string;
+  metrics: {
+    accuracy: number;
+    precision: number;
+    recall: number;
+    f1_score: number;
+    n_estimators: number;
+    max_depth: number | null;
+    n_classes: number;
+    feature_importances: Record<string, number>;
+    confusion_matrix: number[][];
+    train_samples: number;
+    test_samples: number;
+    oob_score?: number;
+  };
+  forest_params: {
+    n_estimators: number;
+    max_depth: number | null;
+    min_samples_split: number;
+    feature_columns: string[];
+    class_labels: Record<string, string>;
+  };
+  class_labels: Record<string, string>;
+  predictions: RandomForestPredictionPoint[];
+  generated_code: string;
+}
+
 // K-Means types
 export interface ClusterAssignment {
   cluster: number;
@@ -312,6 +389,76 @@ class ApiClient {
         n_clusters: nClusters,
       }),
     });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Failed to train model");
+    }
+
+    return response.json();
+  }
+
+  async trainDecisionTree(
+    data: Record<string, unknown>[],
+    featureColumns: string[],
+    targetColumn: string,
+    maxDepth: number | null = null,
+    minSamplesSplit: number = 2,
+    testSize: number = 0.2
+  ): Promise<DecisionTreeTrainResponse> {
+    const response = await fetch(
+      `${this.baseUrl}/api/ml/train/decision-tree`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data,
+          feature_columns: featureColumns,
+          target_column: targetColumn,
+          max_depth: maxDepth,
+          min_samples_split: minSamplesSplit,
+          test_size: testSize,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Failed to train model");
+    }
+
+    return response.json();
+  }
+
+  async trainRandomForest(
+    data: Record<string, unknown>[],
+    featureColumns: string[],
+    targetColumn: string,
+    nEstimators: number = 100,
+    maxDepth: number | null = null,
+    minSamplesSplit: number = 2,
+    testSize: number = 0.2
+  ): Promise<RandomForestTrainResponse> {
+    const response = await fetch(
+      `${this.baseUrl}/api/ml/train/random-forest`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data,
+          feature_columns: featureColumns,
+          target_column: targetColumn,
+          n_estimators: nEstimators,
+          max_depth: maxDepth,
+          min_samples_split: minSamplesSplit,
+          test_size: testSize,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const error = await response.json();

@@ -189,3 +189,98 @@ class KMeansPredictResponse(BaseModel):
     success: bool
     predictions: list[dict]
     message: str
+
+
+# Decision Tree Schemas
+class DecisionTreeTrainRequest(BaseModel):
+    """Request to train a Decision Tree model."""
+    data: list[dict]
+    feature_columns: list[str] = Field(..., min_length=1)
+    target_column: str
+    max_depth: Optional[int] = Field(default=None, ge=1, le=50)
+    min_samples_split: int = Field(default=2, ge=2, le=100)
+    test_size: float = Field(default=0.2, ge=0.1, le=0.5)
+
+
+class DecisionTreePredictionPoint(BaseModel):
+    """Single prediction point for Decision Tree."""
+    actual: int
+    actual_label: str
+    predicted: int
+    predicted_label: str
+    probabilities: dict
+    features: dict
+
+
+class DecisionTreeTrainResponse(BaseModel):
+    """Response after training Decision Tree."""
+    success: bool
+    message: str
+    metrics: dict
+    tree_params: dict
+    class_labels: dict
+    predictions: list[DecisionTreePredictionPoint]
+    generated_code: str
+
+
+class DecisionTreePredictRequest(BaseModel):
+    """Request to make Decision Tree predictions."""
+    data: list[dict]
+    feature_columns: list[str]
+    tree_params: dict
+    class_labels: dict
+
+
+class DecisionTreePredictResponse(BaseModel):
+    """Response with Decision Tree predictions."""
+    success: bool
+    predictions: list[dict]
+    message: str
+
+
+# Random Forest Schemas
+class RandomForestTrainRequest(BaseModel):
+    """Request to train a Random Forest model."""
+    data: list[dict]
+    feature_columns: list[str] = Field(..., min_length=1)
+    target_column: str
+    n_estimators: int = Field(default=100, ge=10, le=500)
+    max_depth: Optional[int] = Field(default=None, ge=1, le=50)
+    min_samples_split: int = Field(default=2, ge=2, le=100)
+    test_size: float = Field(default=0.2, ge=0.1, le=0.5)
+
+
+class RandomForestPredictionPoint(BaseModel):
+    """Single prediction point for Random Forest."""
+    actual: int
+    actual_label: str
+    predicted: int
+    predicted_label: str
+    probabilities: dict
+    features: dict
+
+
+class RandomForestTrainResponse(BaseModel):
+    """Response after training Random Forest."""
+    success: bool
+    message: str
+    metrics: dict
+    forest_params: dict
+    class_labels: dict
+    predictions: list[RandomForestPredictionPoint]
+    generated_code: str
+
+
+class RandomForestPredictRequest(BaseModel):
+    """Request to make Random Forest predictions."""
+    data: list[dict]
+    feature_columns: list[str]
+    forest_params: dict
+    class_labels: dict
+
+
+class RandomForestPredictResponse(BaseModel):
+    """Response with Random Forest predictions."""
+    success: bool
+    predictions: list[dict]
+    message: str

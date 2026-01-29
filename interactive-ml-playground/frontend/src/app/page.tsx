@@ -37,6 +37,22 @@ const models = [
     difficulty: "Intermediate",
     tags: ["unsupervised", "clustering", "partitioning"],
   },
+  {
+    id: "decision-tree",
+    name: "Decision Tree",
+    description: "Rule-based classification through hierarchical splits. Interpretable tree structure.",
+    category: "CLASSIFICATION",
+    difficulty: "Beginner",
+    tags: ["supervised", "classification", "interpretable"],
+  },
+  {
+    id: "random-forest",
+    name: "Random Forest",
+    description: "Ensemble learning combining multiple decision trees. Improved accuracy through voting.",
+    category: "CLASSIFICATION",
+    difficulty: "Intermediate",
+    tags: ["supervised", "ensemble", "bagging"],
+  },
 ];
 
 const procedures = [
@@ -110,7 +126,7 @@ function HeroSection() {
               <br />
               TRAIN MODELS. ANALYZE DATA. GENERATE CODE.
               <br />
-              NO ACCOUNTS REQUIRED. NO DATA RETENTION.
+              READ. IMPLEMENT. GROW.
             </p>
 
             {/* CTA Buttons */}

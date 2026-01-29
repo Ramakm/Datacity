@@ -13,7 +13,7 @@ export default function ResearchPapersPage() {
     ? papers
     : papers.filter(p => p.category === filterCategory);
 
-  const categories = ["all", "foundational", "embeddings", "rnn", "transformer", "llm"];
+  const categories = ["all", "foundational", "embeddings", "rnn", "transformer", "llm", "agents"];
 
   return (
     <div className="min-h-screen bg-terminal-bg">
@@ -40,7 +40,7 @@ export default function ResearchPapersPage() {
                   </h1>
                   <p className="font-mono text-xs text-terminal-black/70 max-w-2xl leading-relaxed">
                     CURATED COLLECTION OF FOUNDATIONAL ML/NLP PAPERS //
-                    FROM INFORMATION THEORY TO LARGE LANGUAGE MODELS
+                    FROM INFORMATION THEORY TO AI AGENTS
                   </p>
                 </div>
               </div>
@@ -165,6 +165,7 @@ export default function ResearchPapersPage() {
             <p className="opacity-70">3. LSTM → ELMo → Attention</p>
             <p className="opacity-70">4. Transformer → BERT → GPT Series</p>
             <p className="opacity-70">5. RLHF → Modern LLMs</p>
+            <p className="opacity-70">6. AI Agents → Foundation Agents → Self-Evolving Systems</p>
             <p className="mt-3"><span className="text-terminal-accent">$</span> _<span className="animate-pulse">|</span></p>
           </div>
         </div>
